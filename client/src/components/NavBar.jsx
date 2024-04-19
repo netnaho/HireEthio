@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import NahomImage from "../assets/Nahom.jpg";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NavBar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
-  //   const currentUser = undefined;
+  const currentUser = undefined;
 
   // useEffect(() => {
   //   window.addEventListener("click", (event) => {
@@ -17,21 +18,26 @@ const NavBar = () => {
   //     }
   //   });
   // }, [profileRef]);
-  const currentUser = {
-    id: 1,
-    userName: "Nahom",
-    isClient: false,
-  };
+
+  // const currentUser = {
+  //   id: 1,
+  //   userName: "Nahom",
+  //   isClient: false,
+  // };
 
   return (
-    <div className=" bg-[#22577A] py-2">
+    <div className=" bg-[#22577A] py-2 mb-10">
       <div className="flex w-full px-3 md:w-[80%] mx-auto justify-between items-center text-white">
         <div className="text-3xl font-bold font-mono">
           <Link to="/">HireEthio</Link>
         </div>
         <div>
           <ul className="flex justify-between gap-x-4">
-            {!currentUser && <li className="">Explore Jobs</li>}
+            {!currentUser && (
+              <li className="">
+                <Link to="/jobs">Explore Jobs</Link>
+              </li>
+            )}
             {currentUser ? (
               currentUser.isClient ? (
                 <>
@@ -69,14 +75,15 @@ const NavBar = () => {
           {currentUser ? (
             <>
               <div className="flex items-center justify-center gap-x-4 relative">
-                <div
+                <Avatar
                   onClick={() => {
                     setProfileOpen(!profileOpen);
                   }}
-                  className=" w-10 h-10 rounded-full bg-[#E5E0FF] overflow-hidden cursor-pointer"
+                  className="cursor-pointer"
                 >
-                  <img src={NahomImage} alt="" />
-                </div>
+                  <AvatarImage src={NahomImage} />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
                 <div>
                   <span className=" text-lg font-bold">nahom_net</span>
                 </div>
@@ -107,12 +114,12 @@ const NavBar = () => {
             </>
           ) : (
             <>
-              <Link>
+              <Link to="/login">
                 <button className="bg-[#38A3A5] px-4 py-1 rounded-full mr-3 font-medium">
                   Log in
                 </button>
               </Link>
-              <Link>
+              <Link to="/register">
                 <button className="bg-[#38A3A5] px-4 py-1 rounded-full mr-3 font-medium">
                   Sign Up
                 </button>
