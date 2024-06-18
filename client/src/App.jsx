@@ -13,6 +13,11 @@ import Applicants from "./pages/Applicants";
 import Hires from "./pages/Hires";
 import JobHires from "./pages/JobHires";
 import JobsApplied from "./pages/JobsApplied";
+import Application from "./pages/Application";
+import Profile from "./pages/Profile";
+import ClientSignup from "./pages/ClientSignUp";
+import FreelancerSignUp from "./pages/FreelancerSignUp";
+import PostJob from "./pages/PostJob";
 
 function App() {
   const Layout = () => {
@@ -38,8 +43,20 @@ function App() {
           element: <Login />,
         },
         {
+          path: "/client-signup",
+          element: <ClientSignup />,
+        },
+        {
+          path: "/freelancer-signup",
+          element: <FreelancerSignUp />,
+        },
+        {
           path: "/register",
           element: <Register />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
         },
         {
           path: "/jobs",
@@ -48,6 +65,10 @@ function App() {
         {
           path: "/posts",
           element: <Posts />,
+        },
+        {
+          path: "/postjob",
+          element: <PostJob />,
         },
         {
           path: "/messages",
@@ -72,6 +93,10 @@ function App() {
         {
           path: "/contracts",
           element: <JobHires />,
+        },
+        {
+          path: "/application",
+          element: <Application />,
         },
       ],
     },
