@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import NahomImage from "../assets/Nahom.jpg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -6,24 +6,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const NavBar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
-  const currentUser = undefined;
+  // const currentUser = undefined;
 
-  // useEffect(() => {
-  //   window.addEventListener("click", (event) => {
-  //     if (!profileRef.current?.contains(event.target)) setProfileOpen(false);
-  //   });
-  //   return window.removeEventListener("click", (event) => {
-  //     if (profileRef.current && !profileRef.current?.contains(event.target)) {
-  //       setProfileOpen(false);
-  //     }
-  //   });
-  // }, [profileRef]);
+  useEffect(() => {
+    window.addEventListener("mousedown", (event) => {
+      if (profileRef.current && !profileRef.current?.contains(event.target))
+        setProfileOpen(false);
+    });
+    return window.removeEventListener("mousedown", (event) => {
+      if (profileRef.current && !profileRef.current?.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    });
+  }, [profileRef]);
 
-  // const currentUser = {
-  //   id: 1,
-  //   userName: "Nahom",
-  //   isClient: false,
-  // };
+  const currentUser = {
+    id: 1,
+    userName: "Nahom",
+    isClient: false,
+  };
 
   return (
     <div className=" bg-[#22577A] py-2 mb-10">
@@ -92,21 +93,45 @@ const NavBar = () => {
                     ref={profileRef}
                     className=" bg-[#3d7b4c] absolute top-[45px] right-0 text-slate-300 w-[150px] flex flex-col py-3 px-2 rounded-[7px]"
                   >
-                    <span>Profile</span>
+                    <span
+                      onClick={() => {
+                        setProfileOpen(false);
+                      }}
+                    >
+                      <Link to="/profile"> Profile</Link>
+                    </span>
                     {currentUser.isClient ? (
                       <>
-                        <span>Post a job</span>
-                        <span>
+                        <span
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                        >
+                          <Link to="/postjob">Post a job</Link>
+                        </span>
+                        <span
+                          onClick={() => {
+                            setProfileOpen(false);
+                          }}
+                        >
                           <Link to="/hires">Hired Jobs</Link>
                         </span>
                       </>
                     ) : (
-                      <span>
+                      <span
+                        onClick={() => {
+                          setProfileOpen(false);
+                        }}
+                      >
                         <Link to="/contracts">My Contracts</Link>
                       </span>
                     )}
-                    <span>
-                      <Link>Log out</Link>
+                    <span
+                      onClick={() => {
+                        setProfileOpen(false);
+                      }}
+                    >
+                      <Link to="/login">Log out</Link>
                     </span>
                   </div>
                 )}
