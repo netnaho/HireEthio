@@ -1,7 +1,15 @@
-import React from "react";
+import Applicant from "@/components/Applicant";
 
 const Applicants = () => {
-  return <div>Applicants</div>;
+  return (
+    <div>
+      <Applicant />
+      <Applicant />
+      <Applicant />
+      <Applicant />
+      <Applicant />
+    </div>
+  );
 };
 
 export default Applicants;

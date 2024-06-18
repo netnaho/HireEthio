@@ -1,7 +1,14 @@
+import SingleApplied from "@/components/SingleApplied";
 import React from "react";
 
 const JobsApplied = () => {
-  return <div>JobsApplied</div>;
+  return (
+    <div className="flex flex-col">
+      <SingleApplied />
+      <SingleApplied />
+      <SingleApplied />
+    </div>
+  );
 };
 
 export default JobsApplied;

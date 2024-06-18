@@ -1,7 +1,10 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const Job = () => {
+  const location = useLocation();
+  console.log(location);
   return (
     <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono hover:bg-slate-100 duration-75">
       {/* Job Title */}
@@ -61,7 +64,15 @@ const Job = () => {
           <span>May 03, 2024</span>
         </div>
         {/* Apply button */}
-        <Button className=" bg-[#38A3A5] px-4 w-[250px]">Apply</Button>
+        <Link to={location.pathname === "/jobs" ? "/application" : "/posts"}>
+          <Button
+            className={`${
+              location.pathname === "/jobs" ? "bg-[#38A3A5]" : "bg-red-500"
+            } px-4 w-[250px]`}
+          >
+            {location.pathname === "/jobs" ? "Apply" : "Delete Job"}
+          </Button>
+        </Link>
       </div>
     </div>
   );
