@@ -23,7 +23,7 @@ const NavBar = () => {
   const currentUser = {
     id: 1,
     userName: "Nahom",
-    isClient: false,
+    isClient: true,
   };
 
   return (
