@@ -1,23 +1,35 @@
 import express from "express";
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-import userRouter from "./routes/user.route.js";
+import { connectDB } from "./config/db.js";
+
+import authRoute from "./routes/auth.route.js";
+import jobRoute from "./routes/job.route.js"
 
 const app = express();
-dotenv.config();
+const port = 8000;
 
-const connect = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO);
-    console.log("connected to mongoDB!");
-  } catch (error) {
-    console.log(error);
-  }
+// Middleware, routes, etc.
+// For example, you can use express.json() to parse JSON bodies
+app.use(express.json());
+app.use("/api/auth", authRoute);
+app.use("/api/job", jobRoute);
+
+// Example route
+app.get("/", (req, res) => {
+    res.send("Starting Server");
+});
+
+
+// Initialize the connection to the database and start the server
+const startServer = async () => {
+    try {
+        await connectDB(); // Wait for the database connection to be established
+        app.listen(port, () => {
+            console.log(`Backend server is running on port ${port}`);
+
+        });
+    } catch (error) {
+        console.error("Failed to start the server Becuase of:", error);
+    }
 };
 
-app.use("/api/user", userRouter);
-
-app.listen(8200, () => {
-  connect();
-  console.log("Backend server is running");
-});
+startServer();
