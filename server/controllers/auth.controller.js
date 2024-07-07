@@ -2,23 +2,31 @@ import { pool } from '../config/db.js'; // Importing the pool for database conne
 
 export const handleLogin = async (req, res) => {
     console.log("we Are authunticating you information please Wait!!")
-    const { Username, Password  } = req.body;
+    const { Username, Password, userType  } = req.body;
     try {
         // Get a connection from the pool
         const connection = await pool.getConnection();
 
         // Query to check if username and password match
-        const [rows] = await connection.execute(
-            'SELECT * FROM freelancer WHERE Username = ? AND Password = ?',
-            [Username, Password]
-        );
+        if(userType == '1'){
+            var [rows] = await connection.execute(
+                'SELECT * FROM freelancer WHERE Username = ? AND Password = ?',
+                [Username, Password]
+            );
+        } else {
+            var [rows] = await connection.execute(
+                'SELECT * FROM client WHERE Username = ? AND Password = ?',
+                [Username, Password]
+            );
+        }
+        
 
         connection.release(); // Release the connection back to the pool
 
         if (rows.length > 0) {
-            res.send('Login successful!');
+            res.json({ message: '1' });
         } else {
-            res.send('Invalid username or password');
+            res.json({ message: 'Invalid Username or Password' });
         }
     } catch (error) {
         console.error('Database query error:', error);

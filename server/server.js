@@ -1,11 +1,17 @@
 import express from "express";
+import authRoute from "./routes/auth.route.js";
+import jobRoute from "./routes/job.route.js";
+import cors from 'cors';
 import { connectDB } from "./config/db.js";
 
-import authRoute from "./routes/auth.route.js";
-import jobRoute from "./routes/job.route.js"
 
 const app = express();
 const port = 8000;
+
+app.use(cors({
+    origin: 'http://localhost:5173', // frontend's URL
+    credentials: true
+  }));
 
 // Middleware, routes, etc.
 // For example, you can use express.json() to parse JSON bodies
