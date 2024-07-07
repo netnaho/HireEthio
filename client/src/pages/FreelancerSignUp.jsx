@@ -20,8 +20,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useState } from "react";
+
 
 const FreelancerSignUp = () => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userName, setUserName] = useState('');
+  const [bio, setBio] = useState('');
+
   return (
     <div className="flex justify-center items-center h-fit py-5">
       <Card className="mx-auto w-[60%]">
