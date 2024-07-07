@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -21,15 +21,41 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-
+import axios from "axios";
 
 const FreelancerSignUp = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userName, setUserName] = useState('');
-  const [bio, setBio] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [Username, setUserName] = useState('');
+  const [Bio, setBio] = useState('');
+  const [Profession, setProfession] = useState('');
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('image', selectedFile);
+      const response = await axios.post('http://localhost:8000/api/auth/register',
+         {  firstName, lastName, Username, Email, Password, Profession, Bio, formData });
+      if(response.data.message == 1){
+        navigate('/login');
+      } else{
+        alert("Something went wrong");
+      }
+    } catch (error) {
+      alert('We could not register you into the system!');
+      console.error(error);
+    }
+  };
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
 
   return (
     <div className="flex justify-center items-center h-fit py-5">
@@ -41,19 +67,32 @@ const FreelancerSignUp = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <form onSubmit={handleSubmit} action="">
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" placeholder="Max" required />
+                <Label htmlFor="first-name">First Name</Label>
+                <Input 
+                  id="first-name" 
+                  placeholder="Max"
+                  onChange={(e) => setFirstName(e.target.value)} 
+                  required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" placeholder="Robinson" required />
+                <Label htmlFor="last-name">Last Name</Label>
+                <Input
+                  id="last-name" 
+                  placeholder="Robinson" 
+                  onChange={(e) => setLastName(e.target.value)}
+                  required />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="user-name">User name</Label>
-                <Input id="user-name" placeholder="Robinson" required />
+                <Label htmlFor="user-name">Username</Label>
+                <Input 
+                  id="user-name" 
+                  placeholder="Robinson" 
+                  onChange={(e) => setUserName(e.target.value)}
+                  required />
               </div>
             </div>
             <div className="grid gap-2">
@@ -62,12 +101,17 @@ const FreelancerSignUp = () => {
                 id="email"
                 type="email"
                 placeholder="m@example.com"
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" />
+              <Input 
+                id="password" 
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                required />
             </div>
             <div className="w-full flex flex-col gap-y-1">
               <Label className="text-base" htmlFor="">
@@ -88,13 +132,13 @@ const FreelancerSignUp = () => {
                     <SelectItem value="developer">Web Developer</SelectItem>
                     <SelectItem value="tutor">Tutor</SelectItem>
                     <SelectLabel>Proffessions</SelectLabel>
-                    <SelectItem value="graphics">Editor</SelectItem>
+                    <SelectItem value="art">Editor</SelectItem>
                     <SelectItem value="photography">Copywriter</SelectItem>
                     <SelectItem value="social-media">
                       Human resource Manager
                     </SelectItem>
                     <SelectItem value="developer">Virtual Assistant</SelectItem>
-                    <SelectItem value="tutor">Accountant</SelectItem>
+                    <SelectItem value="finance">Accountant</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -104,11 +148,12 @@ const FreelancerSignUp = () => {
               <Textarea
                 placeholder="Tell us a little bit about yourself"
                 id="message-2"
+                onChange={(e) => setBio(e.target.value)}
               />
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="picture">Picture</Label>
-              <Input id="picture" type="file" />
+              <Input id="picture" type="file" onChange={handleFileChange}/>
             </div>
             <Button type="submit" className="w-full bg-[#396ca0] rounded-3xl">
               Create an account
@@ -123,6 +168,7 @@ const FreelancerSignUp = () => {
               Sign in
             </Link>
           </div>
+          </form>
         </CardContent>
       </Card>
     </div>
