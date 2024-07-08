@@ -73,6 +73,17 @@ const Login = () => {
               </div>
               <Input id="password" type="password" required />
             </div>
+            <div className="flex gap-x-5">
+              <div className="flex gap-x-2">
+                <input type="radio" name="user-type" id="client" />
+                <label htmlFor="client">Client</label>
+              </div>
+              <div className="flex gap-x-2">
+                <input type="radio" name="user-type" id="freelancer" />
+                <label htmlFor="freelancer">Freelancer</label>
+              </div>
+            </div>
+
             <Button type="submit" className="w-full bg-[#38A3A5] rounded-3xl">
               Login
             </Button>

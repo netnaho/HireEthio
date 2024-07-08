@@ -1,8 +1,10 @@
 import { pool } from "../config/db.js"; // Importing the pool for database connection
+import bcrypt from "bcrypt";
 
 export const handleFreelancerRegister = async (req, res) => {
-  const { firstname, lastname, username, email, password, proffession, bio } =
+  const { firstname, lastname, username, email, password, profession, bio } =
     req.body;
+  const image = req.file.filename;
   try {
     const [rows] = await pool.query(
       "SELECT * FROM freelancer WHERE Email = ?",
@@ -11,22 +13,32 @@ export const handleFreelancerRegister = async (req, res) => {
     if (rows.length > 0) {
       return res.status(400).json({ msg: "Freelancer already exists" });
     }
-
+    const hassedPassword = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
-      `INSERT INTO freelancer (FirstName, LastName, Username, Email, Password, Proffession, Bio)
-VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [firstname, lastname, username, email, password, proffession, bio]
+      `INSERT INTO freelancer (FirstName, LastName, Username, Email, Password, Proffession, Bio, Profile_Picture)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        firstname,
+        lastname,
+        username,
+        email,
+        hassedPassword,
+        profession,
+        bio,
+        image,
+      ]
     );
     console.log(result);
     return res.json({ msg: "Freelancer registered successfully" });
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
   }
 };
 
 export const handleClientRegister = async (req, res) => {
   const { firstname, lastname, username, email, password, clientType } =
     req.body;
+  const image = req.file.filename;
   try {
     const [rows] = await pool.query("SELECT * FROM client WHERE Email = ?", [
       email,
@@ -34,11 +46,11 @@ export const handleClientRegister = async (req, res) => {
     if (rows.length > 0) {
       return res.status(400).json({ msg: "Client already exists" });
     }
-
+    const hassedPassword = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
-      `INSERT INTO client (FirstName, LastName, Username, Email, Password, Client_Type)
-VALUES (?, ?, ?, ?, ?, ?)`,
-      [firstname, lastname, username, email, password, clientType]
+      `INSERT INTO client (FirstName, LastName, Username, Email, Password, Client_Type, Profile_Picture)
+VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [firstname, lastname, username, email, hassedPassword, clientType, image]
     );
     console.log(result);
     return res.json({ msg: "Client registered successfully" });
@@ -57,8 +69,9 @@ export const handleLogin = async (req, res) => {
       if (rows.length === 0) {
         return res.status(400).json({ msg: "No such client" });
       }
-      console.log(rows);
-      if (rows[0].Password == password) {
+      const client = rows[0];
+      const isMatch = await bcrypt.compare(password, client.Password);
+      if (isMatch) {
         return res.json(rows);
       } else {
         return res.status(400).json("login failed");
@@ -71,8 +84,10 @@ export const handleLogin = async (req, res) => {
       if (rows.length === 0) {
         return res.status(400).json({ msg: "No such freelancer" });
       }
-      console.log(rows);
-      if (rows[0].Password == password) {
+
+      const freelancer = rows[0];
+      const isMatch = await bcrypt.compare(password, freelancer.Password);
+      if (isMatch) {
         return res.json(rows);
       } else {
         return res.status(400).json("login failed");

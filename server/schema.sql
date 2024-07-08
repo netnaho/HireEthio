@@ -7,6 +7,7 @@ CREATE TABLE Client (
     Password varchar(255) NOT NULL,
     Client_Type ENUM('Private', 'Organization') NOT NULL,
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    Profile_Picture varchar(255),
 );
 CREATE TABLE Freelancer (
     Freelancer_ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -51,12 +52,12 @@ CREATE TABLE Messages (
     Message_ID INT AUTO_INCREMENT PRIMARY KEY,
     Application_ID INT NOT NULL,
     Sender_ID INT NOT NULL,
+    Sender_Type ENUM('client', 'freelancer') NOT NULL,
     Receiver_ID INT NOT NULL,
+    Receiver_Type ENUM('client', 'freelancer') NOT NULL,
     Content TEXT NOT NULL,
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID),
-    FOREIGN KEY (Sender_ID) REFERENCES Client(Client_ID),
-    FOREIGN KEY (Receiver_ID) REFERENCES Freelancer(Freelancer_ID)
+    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID)
 );
 -- hires
 CREATE TABLE Hires (
