@@ -35,24 +35,31 @@ const FreelancerSignUp = () => {
 
   const navigate = useNavigate();
 
+  // handles the API and response from the API 
+  // this code Sends all the datas from the from to the Back end when submitted
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append('image', selectedFile);
-      const response = await axios.post('http://localhost:8000/api/auth/register',
-         {  firstName, lastName, Username, Email, Password, Profession, Bio, formData });
+      const response = await axios.
+        post('http://localhost:8000/api/auth/register',
+        {  firstName, lastName, Username, Email, Password, Profession, Bio, formData });
+
+      //check wether the user is registed and navigate it to login page 
       if(response.data.message == 1){
         navigate('/login');
-      } else{
+      } else {
         alert("Something went wrong");
       }
+
     } catch (error) {
       alert('We could not register you into the system!');
       console.error(error);
     }
   };
 
+  // this one is for fetching the seleceted fille from the form and setting it to selectedFile useState
   const handleFileChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
@@ -67,6 +74,8 @@ const FreelancerSignUp = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
+
+          {/* the form starts here */}
           <form onSubmit={handleSubmit} action="">
           <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">

@@ -21,8 +21,63 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useState } from "react";
 
 const PostJob = () => {
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    jobType: "",
+    applicantsNeeded: "",
+    jobDescription: "",
+    jobCategory: "",
+    jobSite: "",
+    applicationDeadline: "",
+    exprienceLevel: ""
+  });
+  const {
+    jobTitle,
+    jobType,
+    applicantsNeeded,
+    jobDescription,
+    jobCategory,
+    jobSite,
+    applicationDeadline,
+    exprienceLevel,
+  }= formData;
+
+  const onChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    try{
+      const data = new FormData();
+      data.append("jobTitle", jobTitle);
+      data.append("jobType", jobType);
+      data.append("applicantsNeeded", applicantsNeeded);
+      data.append("jobDescription", jobDescription);
+      data.append("jobCategory", jobCategory);
+      data.append("jobSite", jobSite);
+      data.append("applicationDeadline", applicationDeadline);
+      data.append("exprienceLevel", exprienceLevel);
+      const response = await axios.
+        post('http://localhost:8000/api/auth/register', data);
+
+      //check wether the user is registed and navigate it to login page 
+      if(response.data.message == 1){
+        navigate('/posts');
+      } else {
+        alert("Something went wrong!  please referesh and try again");
+      }
+
+    } catch (error) {
+      alert('We could not register you into the system!');
+      console.error(error);
+    }
+  };
+
+
   return (
     <div className=" h-fit mb-10">
       <Card className="mx-auto w-[80%]">
@@ -31,12 +86,14 @@ const PostJob = () => {
           <CardDescription>Enter detail of the job</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-y-2">
+
+          {/* the form starts here */}
+          <form onSubmit={onSubmit} className="grid gap-y-2">
             <div className="grid gap-2">
               <Label className="text-xl" htmlFor="job-title">
                 Job Title
               </Label>
-              <Input id="job-title" placeholder="Enter Title" required />
+              <Input onChange={onChange} name="jobTitle"  id="job-title" placeholder="Enter Title" required />
             </div>
             <div className="flex gap-x-14 my-5">
               <div className="grid gap-y-3">
@@ -159,7 +216,7 @@ const PostJob = () => {
             <div className="flex justify-end">
               <Button className="">Post Job</Button>
             </div>
-          </div>
+          </form>
 
           {/* <div className="grid gap-4">
             <div className="grid grid-cols-2 gap-4">
