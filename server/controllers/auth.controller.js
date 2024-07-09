@@ -61,6 +61,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?)`,
 
 export const handleLogin = async (req, res) => {
   const { email, password, isClient } = req.body;
+  console.log(email, password, isClient);
   try {
     if (isClient) {
       const [rows] = await pool.query("SELECT * FROM client WHERE Email = ?", [

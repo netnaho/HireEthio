@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Card,
   CardContent,
@@ -21,7 +20,7 @@ const ClientSignup = () => {
     username: "",
     email: "",
     password: "",
-    clientType: "Organization",
+    clientType: "",
     profilePic: null,
   });
   const {
@@ -33,6 +32,10 @@ const ClientSignup = () => {
     clientType,
     profilePic,
   } = formData;
+
+  const handleOptionChange = (e) => {
+    setFormData({ ...formData, clientType: e.target.value });
+  };
 
   const handleChange = (e) => {
     if (e.target.name === "profilePic") {
@@ -51,6 +54,7 @@ const ClientSignup = () => {
     data.append("password", password);
     data.append("clientType", clientType);
     data.append("profile-pic", profilePic);
+    // api/auth/client-register
     axios
       .post("http://localhost:8800/api/auth/client-register", data)
       .then((res) => console.log(res))
@@ -99,35 +103,30 @@ const ClientSignup = () => {
                     placeholder="Robinson"
                     required
                   />
-                  <RadioGroup
-                    onValueChange={(value) => {
-                      console.log(value);
-                      if (value == "private") {
-                        setFormData({
-                          ...formData,
-                          clientType: "Organization",
-                        });
-                        console.log(formData);
-                      } else if (value === "company") {
-                        setFormData({
-                          ...formData,
-                          clientType: "Private",
-                        });
-                        console.log(formData);
-                      }
-                    }}
-                    className="flex gap-x-7"
-                    defaultValue="company"
-                  >
+                  <div className="flex gap-x-4 items-center">
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="private" id="private" />
-                      <Label htmlFor="private">Private Client</Label>
+                      <input
+                        type="radio"
+                        value="Private"
+                        id="private"
+                        checked={formData.clientType === "Private"}
+                        onChange={handleOptionChange}
+                        name="client-type"
+                      />
+                      <Label htmlFor="private">Private</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="company" id="company" />
+                      <input
+                        type="radio"
+                        value="Organization"
+                        id="company"
+                        checked={formData.clientType === "Organization"}
+                        onChange={handleOptionChange}
+                        name="client-type"
+                      />
                       <Label htmlFor="company">Organization</Label>
                     </div>
-                  </RadioGroup>
+                  </div>
                 </div>
               </div>
               <div className="grid gap-2">

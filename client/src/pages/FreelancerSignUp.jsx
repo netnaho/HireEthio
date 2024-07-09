@@ -62,6 +62,7 @@ const FreelancerSignUp = () => {
     data.append("profession", profession);
     data.append("bio", bio);
     data.append("profile-pic", profilePic);
+    // api/auth/freelancer-register
     axios
       .post("http://localhost:8800/api/auth/freelancer-register", data)
       .then((res) => console.log(res))
