@@ -1,13 +1,14 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; // Ensure the correct import path
 
-const Job = () => {
+const Job = (props) => {
+  const jobsData = props.jobs || []; // Ensure jobsData is an array, initialize as empty array if props.jobs is null or undefined
   const location = useLocation();
   console.log(location);
+
   return (
     <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono hover:bg-slate-100 duration-75">
-      {/* Job Title */}
       <div>
         <h1 className="font-bold text-2xl">Senior Angular Developer</h1>
       </div>
@@ -55,7 +56,7 @@ const Job = () => {
         </div>
         {/* Experience level */}
         <div className="flex flex-col">
-          <span className=" text-slate-500">Expenrence level</span>
+          <span className=" text-slate-500">Experience level</span>
           <span>Intermediate</span>
         </div>
         {/* Application Deadline */}
