@@ -4,6 +4,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Navigate } from "react-router-dom";
+import edit from "../assets/edit.svg"
 
 const Posts = () => {
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const Posts = () => {
   
   }, [clientID]);
 
+  // Delete a Job 
  const handleDelete = async (event) => {
     const jobID = event.target.value;
       try{
@@ -50,6 +52,18 @@ const Posts = () => {
           console.error(e.message)
       }
   }
+
+  // View Applicants in a specific job
+  const handleViewApplicants = async (event) => {
+    const jobID = event.target.value;
+      try{
+        const response = await axios.post(`http://localhost:8000/api/application/viewSpecificJobApplicants`, {jobID});
+        navigate("/applicants", { state: { applicants: response.data } });
+      } catch (e) {
+          alert("it looks like something is wrong! please try again");
+          console.error(e.message)
+      }
+  }
   
 
   if (loading){
@@ -58,6 +72,11 @@ const Posts = () => {
   if(error){
     return ( <div> error: {error.message}</div> )
   }
+
+  if (jobs.length === 0) {
+    return <div>You haven't posted any job yet</div>;
+  }
+
   return (
     <div>
       <div className="flex flex-col w-[80%] mx-auto">
@@ -65,9 +84,12 @@ const Posts = () => {
       {jobs.map((job) => (
         <div key={job.job_ID} className="rounded-md mb-5 shadow-sm shadow-slate-700 hover:bg-slate-100 p-4">
           <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono  duration-75">
-      <div>
-        <h1 className="font-bold text-2xl">{job.Job_Category}</h1>
-      </div>
+            <div className="flex">
+              <h1 className="font-bold text-2xl mr-2">{job.Job_Category}</h1>
+              <button className="border rounded-full p-2 "> 
+                <img src={edit} alt="edit" className="w-5 h-5" />
+              </button>
+            </div>
       {/* Job related Info-1 */}
       <div className="flex gap-x-8">
         <span className="text-sm text-slate-500 font-medium">
@@ -117,6 +139,15 @@ const Posts = () => {
         </div>
         {/* Apply button */}
         {/* <Link to={location.pathname === "/jobs" ? "/application" : "/posts"}> */}
+        <div className="flex-col">
+        <button
+            type="submit"
+            value= {job.Job_ID}
+            onClick = {handleViewApplicants}
+            className="bg-[#38A3A5] px-4 py-2 rounded mb-2 text-white text-sm w-[250px]"
+          >
+            Applicants
+          </button> <br />
           <Button
             type="submit"
             value= {job.Job_ID}
@@ -126,7 +157,9 @@ const Posts = () => {
             } px-4 w-[250px]`}
           >
             {location.pathname === "/jobs" ? "Apply" : "Delete Job"}
-          </Button>
+          </Button><br />
+          
+        </div>
         {/* </Link> */}
       </div>
     </div>
@@ -134,8 +167,8 @@ const Posts = () => {
     ))}
         
       </div>
-    </div>
-  );
+    </div> 
+  );  
 };
 
 export default Posts;
