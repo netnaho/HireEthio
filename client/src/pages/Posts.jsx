@@ -53,6 +53,7 @@ const Posts = () => {
       }
   }
 
+  
   // View Applicants in a specific job
   const handleViewApplicants = async (event) => {
     const jobID = event.target.value;
