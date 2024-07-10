@@ -50,7 +50,7 @@ export const viewJobPost = async (req, res) => {
 };
 
 
-// view job posted by a client using client ID
+// Delete specific job posted by a client using client ID
 export const deleteJob = async (req, res) => {  
     console.log("We are Deleting your posted job")
     const jobID = req.query.job_ID; // get the jobID from the request parameters

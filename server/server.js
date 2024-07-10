@@ -1,6 +1,7 @@
 import express from "express";
 import authRoute from "./routes/auth.route.js";
 import jobRoute from "./routes/job.route.js";
+import applicationRoute from "./routes/application.route.js";
 import cors from 'cors';
 import { connectDB } from "./config/db.js";
 
@@ -18,6 +19,7 @@ app.use(cors({
 app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/job", jobRoute);
+app.use("/api/application", applicationRoute);
 
 // Example route
 app.get("/", (req, res) => {
