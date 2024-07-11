@@ -1,10 +1,14 @@
 import express from "express";
 import cors from "cors";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import bodyParser from "body-parser";
 import multer from "multer";
 import path from "path";
 
 import authRoute from "./routes/auth.route.js";
 import jobRoute from "./routes/job.route.js";
+import { userInfo } from "os";
 
 const app = express();
 
@@ -27,15 +31,42 @@ const upload = multer({
 // Middleware, routes, etc.
 // For example, you can use express.json() to parse JSON bodies
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: true, // Allows any origin
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allows any method
+    credentials: true, // Allows cookies and other credentials
+  })
+);
 app.use(express.static("uploads"));
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(
+  session({
+    secret: "thisissecretkey",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false,
+      maxAge: 1000 * 60 * 60 * 24,
+    },
+  })
+);
 
 app.use("/api/auth", authRoute);
 app.use("/api/job", jobRoute);
 
+app.get("/check", (req, res) => {
+  if (req.session.userInfo) {
+    res.json({ isLoggedIn: true, userInfo: req.session.userInfo });
+  } else {
+    res.json({ isLoggedIn: false, userInfo: null });
+  }
+});
+
 app.post("/test", upload.single("profile-pic"), (req, res) => {
   console.log(req.body);
-  console.log(req.file);
+  res.send("good");
 });
 
 app.listen(8800, () => {

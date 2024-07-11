@@ -35,7 +35,7 @@ router.post(
   upload.single("profile-pic"),
   handleClientRegister
 );
-router.post("/login", handleLogin);
+router.post("/login", upload.single("profile-pic"), handleLogin);
 // router.post("/logout", logout)
 
 export default router;

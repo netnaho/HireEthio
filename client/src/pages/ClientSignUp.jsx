@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,6 +23,7 @@ const ClientSignup = () => {
     clientType: "",
     profilePic: null,
   });
+  const navigate = useNavigate();
   const {
     firstname,
     lastname,
@@ -57,7 +58,10 @@ const ClientSignup = () => {
     // api/auth/client-register
     axios
       .post("http://localhost:8800/api/auth/client-register", data)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res.data);
+        navigate("/login");
+      })
       .catch((error) => console.log(error));
     console.log(data);
   };

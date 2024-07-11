@@ -53,7 +53,9 @@ VALUES (?, ?, ?, ?, ?, ?, ?)`,
       [firstname, lastname, username, email, hassedPassword, clientType, image]
     );
     console.log(result);
-    return res.json({ msg: "Client registered successfully" });
+    return res.json({
+      msg: "Client registered successfully",
+    });
   } catch (e) {
     console.log(e);
   }
@@ -61,7 +63,6 @@ VALUES (?, ?, ?, ?, ?, ?, ?)`,
 
 export const handleLogin = async (req, res) => {
   const { email, password, isClient } = req.body;
-  console.log(email, password, isClient);
   try {
     if (isClient) {
       const [rows] = await pool.query("SELECT * FROM client WHERE Email = ?", [
@@ -73,7 +74,9 @@ export const handleLogin = async (req, res) => {
       const client = rows[0];
       const isMatch = await bcrypt.compare(password, client.Password);
       if (isMatch) {
-        return res.json(rows);
+        req.session.userInfo = { isClient: isClient, userData: client };
+        console.log(req.session.userData);
+        return res.json({ info: rows[0], isClient: isClient });
       } else {
         return res.status(400).json("login failed");
       }
@@ -89,12 +92,14 @@ export const handleLogin = async (req, res) => {
       const freelancer = rows[0];
       const isMatch = await bcrypt.compare(password, freelancer.Password);
       if (isMatch) {
-        return res.json(rows);
+        req.session.userInfo = { isClient: isClient, userData: freelancer };
+        console.log(req.session.userData);
+        return res.json({ info: rows[0], isClient: isClient });
       } else {
         return res.status(400).json("login failed");
       }
     }
   } catch (error) {
-    console.log("");
+    console.log(error);
   }
 };

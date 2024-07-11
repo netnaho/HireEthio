@@ -1,5 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import axios from "axios";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -18,12 +19,24 @@ import Profile from "./pages/Profile";
 import ClientSignup from "./pages/ClientSignUp";
 import FreelancerSignUp from "./pages/FreelancerSignUp";
 import PostJob from "./pages/PostJob";
+import { useEffect, useState } from "react";
 
 function App() {
+  const [userInfo, setUserInfo] = useState(null);
+  console.log("nahom7878hkkh");
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        setUserInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const Layout = () => {
     return (
       <>
-        <NavBar />
+        <NavBar userData={userInfo} />
         <Outlet />
         <Footer />
       </>
@@ -36,7 +49,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Home userData={userInfo} />,
         },
         {
           path: "/login",

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ const Login = () => {
     password: "",
     isClient: null,
   });
-  const { email, password, isClient } = userLoginInfo;
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setUserLoginInfo({ ...userLoginInfo, [e.target.name]: e.target.value });
   };
@@ -22,53 +22,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("isClient", isClient);
     axios
-      .post("http://localhost:8800/test", formData)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .post("http://localhost:8800/api/auth/login", userLoginInfo)
+      .then((res) => {
+        const userData = res.data;
+        navigate("/", { state: { userData } });
+        window.location.reload();
+      })
+      .catch((err) => console.log(err.response));
   };
 
   return (
-    // <div className="flex justify-center items-center h-[71vh]">
-    //   <div className="w-[30%] mx-auto shadow-md shadow-slate-500 p-7 rounded-lg">
-    //     <h1 className="text-center text-3xl font-bold mb-3">
-    //       Login to your Account
-    //     </h1>
-    //     <form action="" method="get">
-    //       <label className="font-medium" htmlFor="username">
-    //         Username:
-    //       </label>
-    //       <Input
-    //         className="mt-2 focus-visible:ring-green-700"
-    //         id="email"
-    //         type="email"
-    //         placeholder="Email"
-    //       />
-    //       <br />
-    //       <label className="font-medium" htmlFor="password">
-    //         Password:
-    //       </label>
-    //       <Input
-    //         className="mt-2 focus-visible:ring-green-700"
-    //         id="password"
-    //         type="password"
-    //         placeholder="Password"
-    //       />
-    //       <div className="flex justify-center items-center mt-6">
-    //         <Button className="w-full bg-[#38A3A5] rounded-3xl">Log in</Button>
-    //       </div>
-    //     </form>
-    //     <Link to="/register">
-    //       <p className=" hover:text-blue-500 mt-2 text-center">
-    //         Don&apos;t have an account, signup
-    //       </p>
-    //     </Link>
-    //   </div>
-    // </div>
     <div className="w-full lg:grid lg:min-h-[400px] lg:grid-cols-2 xl:min-h-[500px]">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto grid w-[450px] gap-6">
@@ -136,9 +100,6 @@ const Login = () => {
 
               <Button type="submit" className="w-full bg-[#38A3A5] rounded-3xl">
                 Login
-              </Button>
-              <Button variant="outline" className="w-full">
-                Login with Google
               </Button>
             </div>
           </form>

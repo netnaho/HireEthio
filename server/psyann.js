@@ -126,6 +126,96 @@ app.get("/categories", (req, res) => {
   ]);
 });
 
+app.get("/orders", (req, res) => {
+  res.json([
+    {
+      id: "1",
+      productName: "Jordan",
+      quantity: 4,
+      unitPrice: 450,
+      orderedBy: "User1",
+      productCategory: "Clothes",
+    },
+    {
+      id: "2",
+      productName: "Harry Potter",
+      quantity: 4,
+      unitPrice: 450,
+      orderedBy: "User2",
+      productCategory: "Books",
+    },
+    {
+      id: "3",
+      productName: "MSI Laptop",
+      quantity: 4,
+      unitPrice: 450,
+      orderedBy: "User3",
+      productCategory: "Electronics",
+    },
+    {
+      id: "4",
+      productName: "Jordan",
+      quantity: 10,
+      unitPrice: 450,
+      orderedBy: "user4",
+      productCategory: "Clothes",
+    },
+    {
+      id: "5",
+      productName: "Iphone X",
+      quantity: 2,
+      unitPrice: 1200,
+      orderedBy: "user4",
+      productCategory: "Electronics",
+    },
+  ]);
+});
+
+app.get("/payments", (req, res) => {
+  res.json([
+    {
+      id: "1",
+      productName: "Jordan",
+      totalPrice: 4500,
+      orderedBy: "User1",
+      productCategory: "Clothes",
+      paymentNum: "QFF849348w10",
+    },
+    {
+      id: "2",
+      productName: "Harry Potter",
+      totalPrice: 450,
+      orderedBy: "User2",
+      productCategory: "Books",
+      paymentNum: "QFF849348w10",
+    },
+    {
+      id: "3",
+      productName: "MSI Laptop",
+      totalPrice: 125000,
+      orderedBy: "User3",
+      productCategory: "Electronics",
+      paymentNum: "QFF849348w10",
+    },
+    {
+      id: "4",
+      productName: "T-shirt",
+      totalPrice: 2050,
+      orderedBy: "user4",
+      productCategory: "Clothes",
+      paymentNum: "QFF849348w10",
+    },
+    {
+      id: "5",
+      productName: "Iphone X",
+      totalPrice: 1200,
+      orderedBy: "user4",
+      productCategory: "Electronics",
+      paymentNum: "QFF849348w10",
+    },
+  ]);
+});
+
 app.listen(port, () => {
   console.log("Connected to backend.");
 });
