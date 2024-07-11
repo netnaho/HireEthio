@@ -46,10 +46,10 @@ const PostJob = () => {
     };
 
     const handleApplicantsNeeded = (event) => {
-        const { name, checked } = event.target;
+        const { value, checked } = event.target;
         setApplicantsNeeded((prevValues) => ({
             ...prevValues,
-            [name]: checked,
+            [value]: checked,
         }));
     };
 
@@ -117,24 +117,43 @@ const PostJob = () => {
                                 <Label className="text-xl" htmlFor="job-type">
                                     Job Type
                                 </Label>
-                                <RadioGroup
+                                <div
                                     className="flex gap-x-5 pl-4"
-                                    value={jobType}
+                                    
                                     onChange={handleJobType}
                                 >
                                     <div className="flex items-center gap-x-2">
-                                        <RadioGroupItem value="fulltime" id="r1" />
+                                        <input
+                                            type="radio"
+                                            value="Full Time" 
+                                            id="r1" 
+                                            name="type"
+                                            checked = {jobType === "Full Time"}
+                                            onChange={handleJobType} />
                                         <Label htmlFor="r1">Full Time</Label>
                                     </div>
                                     <div className="flex items-center gap-x-2">
-                                        <RadioGroupItem value="parttime" id="r2" />
+                                        <input
+                                            type="radio"
+                                            value="Part Time" 
+                                            id="r2" 
+                                            name="type"
+                                            checked = {jobType === "Part Time"}
+                                            onChange={handleJobType} />
                                         <Label htmlFor="r2">Part Time</Label>
                                     </div>
                                     <div className="flex items-center gap-x-2">
-                                        <RadioGroupItem value="freelance" id="r3" />
+                                        <input
+                                            type="radio"
+                                            value="Freelance" 
+                                            id="r3" 
+                                            name="type"
+                                            checked = {jobType === "Freelance"}
+                                            onChange={handleJobType}
+                                            className="" />
                                         <Label htmlFor="r3">Freelance</Label>
                                     </div>
-                                </RadioGroup>
+                                </div>
                             </div>
                             <div className="grid gap-y-3">
                                 <Label className="text-xl" htmlFor="applicants">
@@ -142,15 +161,18 @@ const PostJob = () => {
                                 </Label>
                                 <div className="flex gap-x-4 pl-4">
                                     <div className="flex gap-x-2 items-center">
-                                        <Checkbox id="male"
+                                        <input type="checkbox" id="male"
                                             name="male"
+                                            value="male"
                                             checked={applicantsNeeded.male || false}
                                             onChange={handleApplicantsNeeded} />
                                         <Label htmlFor="male">Male</Label>
                                     </div>
                                     <div className="flex gap-x-2 items-center">
-                                        <Checkbox id="female"
+                                        <input type="checkbox" id="female"
                                             name="female"
+                                            value="female"
+                                            className="w-12"
                                             checked={applicantsNeeded.female || false}
                                             onChange={handleApplicantsNeeded} />
                                         <Label htmlFor="female">Female</Label>
@@ -190,20 +212,31 @@ const PostJob = () => {
                                 <Label className="text-xl" htmlFor="job-type">
                                     Job Site
                                 </Label>
-                                <RadioGroup
-                                    className="flex gap-x-5 pl-4"
-                                    value={jobSite}
-                                    onChange={handleJobSite}
-                                >
+                                <div
+                                    className="flex gap-x-5 pl-4">
                                     <div className="flex items-center gap-x-2">
-                                        <RadioGroupItem value="on-site" id="onsite" />
+                                        <input
+                                            type="radio"
+                                            value="On-Site" 
+                                            id="onsite" 
+                                            name="site"
+                                            checked = {jobSite === "On-Site"}
+                                            onChange={handleJobSite}
+                                            className="" />
                                         <Label htmlFor="onsite">On-Site</Label>
                                     </div>
                                     <div className="flex items-center gap-x-2">
-                                        <RadioGroupItem value="Remote" id="remote" />
+                                        <input
+                                            type="radio"
+                                            value="Remote" 
+                                            id="remote" 
+                                            name="site"
+                                            checked = {jobSite === "Remote"}
+                                            onChange={handleJobSite}
+                                            className="" />
                                         <Label htmlFor="remote">Remote</Label>
                                     </div>
-                                </RadioGroup>
+                                </div>
                             </div>
                             <div className="grid mt-3 gap-y-3">
                                 <Label className="text-xl" htmlFor="date">
