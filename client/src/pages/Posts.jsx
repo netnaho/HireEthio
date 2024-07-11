@@ -68,14 +68,14 @@ const Posts = () => {
   
 
   if (loading){
-    return ( <div>Loading...</div> )
+    return ( <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">Loading...</div> )
   }
   if(error){
-    return ( <div> error: {error.message}</div> )
+    return ( <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4"> error: {error.message}</div> )
   }
 
   if (jobs.length === 0) {
-    return <div>You haven't posted any job yet</div>;
+    return <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4" >You haven't posted any job yet</div>;
   }
 
   return (
@@ -100,7 +100,7 @@ const Posts = () => {
           {job.Created_at}
         </span>
         <span className="text-sm text-slate-500 font-medium">
-          Addis Ababa, Ethiopia
+          {job.Location}
         </span>
       </div>
       {/* Job Description */}

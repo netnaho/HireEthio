@@ -2,6 +2,7 @@ import express from "express";
 import authRoute from "./routes/auth.route.js";
 import jobRoute from "./routes/job.route.js";
 import applicationRoute from "./routes/application.route.js";
+import hireRoute from "./routes/hire.route.js"
 import cors from 'cors';
 import { connectDB } from "./config/db.js";
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/auth", authRoute);
 app.use("/api/job", jobRoute);
 app.use("/api/application", applicationRoute);
+app.use("/api/hire", hireRoute);
 
 // Example route
 app.get("/", (req, res) => {

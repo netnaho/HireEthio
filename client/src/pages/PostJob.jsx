@@ -36,6 +36,8 @@ const PostJob = () => {
     const [jobSite, setJobSite] = useState("");
     const [applicationDeadline, setApplicationDeadline] = useState("");
     const [experienceLevel, setExperienceLevel] = useState("");
+    const [jobLocation, setJobLocation] = useState("");
+
 
     const handleJobType = (event) => {
         setJobType(event.target.value);
@@ -63,30 +65,26 @@ const PostJob = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        console.log(ClientID, 
-          jobTitle, 
-          jobType, 
-          applicantsNeeded, 
-          jobDescription, 
-          jobCategory, 
-          jobSite, 
-          applicationDeadline, 
-          experienceLevel)
+        const data = new FormData();
+        data.append("Client_ID", ClientID); 
+        data.append("Job_Title", jobTitle);
+        data.append("Job_Type", jobType);
+        data.append("Applicants_Needed", JSON.stringify(applicantsNeeded)) ;
+        data.append("Job_Description", jobDescription); 
+        data.append("Job_Category", jobCategory); 
+        data.append("Job_Site", jobSite); 
+        data.append("Application_Deadline", applicationDeadline) 
+        data.append("Experience_Level", experienceLevel)
+        data.append("Job_Location", jobLocation)
+
+        for (let [key, value] of data.entries()) {
+            console.log(key, value);
+        }
 
         try {
-            const response = await axios.post('http://localhost:8000/api/job/post', {
-                ClientID, 
-                jobTitle, 
-                jobType, 
-                applicantsNeeded, 
-                jobDescription, 
-                jobCategory, 
-                jobSite, 
-                applicationDeadline, 
-                experienceLevel
-            });
+            const response = await axios.post('http://localhost:8000/api/job/post', data);
 
-            if (response.data.message === 1) {
+            if (response.data.message === '1') {
                 navigate('/posts');
             } else {
                 alert("Something went wrong! Please refresh and try again");
@@ -264,6 +262,12 @@ const PostJob = () => {
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                        </div>
+                        <div>
+                            <Label className = "text-xl" >
+                                Location
+                            </Label>
+                            <Input onChange={(e) => setJobLocation(e.target.value)} name="jobLocation" id="job-location" placeholder="Enter Job Location" required />
                         </div>
                         <div className="flex justify-end">
                             <Button type="submit">Post Job</Button>

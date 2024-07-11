@@ -1,23 +1,50 @@
 import { pool } from '../config/db.js'; // Importing the pool for database connection
+import multer from 'multer';
 
 // handle posting jobs for a client 
 export const handleJobPost = async (req, res) => {
     console.log("we are Posting your job")
-    const { Client_ID, Job_Title, Job_Type, Applicant_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Exprience_Level  } = req.body;
-    console.log(Client_ID, Job_Title, Job_Type, Applicant_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Exprience_Level)
+    console.log(req.body)
+    const { Client_ID, Job_Title, Job_Type, Applicants_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Experience_Level, Job_Location  } = req.body;
+
+    // Parse the Applicants_Needed field from JSON string to object
+    let applicantsNeededParsed;
+    try {
+        applicantsNeededParsed = JSON.parse(Applicants_Needed);
+    } catch (error) {
+        console.error('Failed to parse Applicants_Needed:', error);
+        return res.status(400).send('Invalid Applicants_Needed format');
+    }
+
+    // Construct the Applicants_Needed string based on the parsed object
+    let applicantsNeededString = '';
+    if (applicantsNeededParsed.male) {
+        applicantsNeededString += 'Male ';
+    }
+    if (applicantsNeededParsed.female) {
+        applicantsNeededString += 'Female';
+    }
+    applicantsNeededString = applicantsNeededString.trim(); // Remove any trailing spaces
+
+    console.log(Client_ID, Job_Title, Job_Type, applicantsNeededString, Job_Description, Job_Category, Job_Site, Application_Deadline, Experience_Level)
     try {
         // Get a connection from the pool
         const connection = await pool.getConnection();
 
         // Insert the new job into the database
         const [result] = await connection.execute(
-            'INSERT INTO jobs (Client_ID, Job_Title, Job_Type, Applicants_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Experience_Level) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [Client_ID, Job_Title, Job_Type, Applicant_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Exprience_Level]
+            'INSERT INTO jobs (Client_ID, Job_Title, Job_Type, Applicants_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Experience_Level, Location) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [Client_ID, Job_Title, Job_Type, applicantsNeededString, Job_Description, Job_Category, Job_Site, Application_Deadline, Experience_Level, Job_Location]
         );
 
         connection.release(); // Release the connection back to the pool
 
-        res.status(201).send('Job Posted successfully!');
+        if(result.affectedRows > 0){
+            res.json({message: '1'});
+            console.log('Job Posted successfully!')
+        }
+        else
+            res.json({message: '2'})
     } catch (error) {
         console.error('Database query error:', error);
         res.status(500).send('Internal server error');
