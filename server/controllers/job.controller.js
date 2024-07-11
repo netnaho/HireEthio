@@ -1,9 +1,10 @@
 import { pool } from '../config/db.js'; // Importing the pool for database connection
 
+// handle posting jobs for a client 
 export const handleJobPost = async (req, res) => {
     console.log("we are Posting your job")
     const { Client_ID, Job_Title, Job_Type, Applicant_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Exprience_Level  } = req.body;
-
+    console.log(Client_ID, Job_Title, Job_Type, Applicant_Needed, Job_Description, Job_Category, Job_Site, Application_Deadline, Exprience_Level)
     try {
         // Get a connection from the pool
         const connection = await pool.getConnection();
