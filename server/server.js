@@ -64,6 +64,17 @@ app.get("/check", (req, res) => {
   }
 });
 
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("Failed to destroy session");
+      return res.status(500).send("Failed to logout");
+    }
+    res.sendStatus(200);
+    console.log("good");
+  });
+});
+
 app.post("/test", upload.single("profile-pic"), (req, res) => {
   console.log(req.body);
   res.send("good");

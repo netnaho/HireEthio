@@ -41,7 +41,25 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
 
 export const getAllJobs = async (req, res) => {
   try {
-    const [rows] = await pool.query(`SELECT * FROM jobs`);
+    const [rows] = await pool.query(`SELECT 
+    Jobs.Job_ID,
+    Jobs.Client_ID,
+    Jobs.Job_Title,
+    Jobs.Job_Type,
+    Jobs.Applicants_Needed,
+    Jobs.Job_Description,
+    Jobs.Job_Category,
+    Jobs.Job_Site,
+    Jobs.Application_Deadline,
+    Jobs.Experience_Level,
+    Jobs.Created_at,
+    Jobs.Salary,
+    Jobs.Location,
+    Client.Username
+FROM 
+    Jobs
+JOIN 
+    Client ON Jobs.Client_ID = Client.Client_ID;`);
     console.log(rows);
     return res.json(rows);
   } catch (error) {

@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Job from "../components/Job";
 
 const Jobs = () => {
+  const [allJobs, setAllJobs] = useState(null);
+  const [searchedJob, setSearchedJob] = useState("");
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/api/job/all-jobs")
+      .then((res) => {
+        console.log(res.data);
+        setAllJobs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const clickHandler = () => {
+    const searchedJobs = allJobs.filter((job) => {
+      return job.Job_Category == searchedJob;
+    });
+    setAllJobs(searchedJobs);
+  };
+
+  const handleChange = (e) => {
+    setSearchedJob(e.target.value);
+    axios
+      .get("http://localhost:8800/api/job/all-jobs")
+      .then((res) => {
+        console.log(res.data);
+        console.log("nahom");
+        setAllJobs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="py-5">
       <div className="flex gap-x-14 px-10 justify-center">
@@ -328,21 +363,42 @@ const Jobs = () => {
         <div className="w-[65%] py-5 shadow-md shadow-slate-500 rounded-lg">
           {/* search input field */}
           <div className="flex w-full px-5 mb-3">
-            <Input className="w-[70%] mr-3" type="email" placeholder="Search" />
-            <Button className=" bg-[#38A3A5]" type="submit">
+            <Input
+              onChange={handleChange}
+              className="w-[70%] mr-3"
+              type="email"
+              placeholder="Search"
+            />
+            <Button
+              onClick={clickHandler}
+              className=" bg-[#38A3A5]"
+              type="submit"
+            >
               Search
             </Button>
           </div>
           {/* job card Lists */}
           <div>
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
+            {allJobs &&
+              allJobs.map((job, index) => {
+                return (
+                  <div key={index}>
+                    <Job
+                      jobTitle={job.Job_Title}
+                      clientName={job.Username}
+                      postedAt={job.Created_at}
+                      locatedAt={job.Location}
+                      jobDescription={job.Job_Description}
+                      jobCategory={job.Job_Category}
+                      jobSite={job.Job_Site}
+                      jobType={job.Job_Type}
+                      salary={job.Salary}
+                      experience={job.Experience_Level}
+                      deadline={job.Application_Deadline}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>

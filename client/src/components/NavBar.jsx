@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import NahomImage from "../assets/Nahom.jpg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -32,6 +32,20 @@ const NavBar = () => {
       }
     });
   }, [profileRef]);
+
+  const handleLogout = async () => {
+    axios
+      .post("http://localhost:8800/logout")
+      .then((res) => {
+        if (res.status === 200) {
+          navigate("/login");
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        console.log("Error logging out: ", err);
+      });
+  };
 
   const currentUser = {
     id: 1,
@@ -109,11 +123,15 @@ const NavBar = () => {
                       }}
                       className="cursor-pointer"
                     >
-                      <AvatarImage src={NahomImage} />
+                      <AvatarImage
+                        src={`http://localhost:8800/images/${userData.userInfo.userData.Profile_Picture}`}
+                      />
                       <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div>
-                      <span className=" text-lg font-bold">nahom_net</span>
+                      <span className=" text-lg font-bold">
+                        {userData.userInfo.userData.Username}
+                      </span>
                     </div>
                     {profileOpen && (
                       <div
@@ -158,7 +176,9 @@ const NavBar = () => {
                             setProfileOpen(false);
                           }}
                         >
-                          <Link to="/login">Log out</Link>
+                          <button onClick={handleLogout} to="/login">
+                            Log out
+                          </button>
                         </span>
                       </div>
                     )}
