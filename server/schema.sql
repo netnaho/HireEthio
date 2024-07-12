@@ -62,8 +62,10 @@ CREATE TABLE Messages (
 CREATE TABLE Hires (
     Hire_ID INT AUTO_INCREMENT PRIMARY KEY,
     Application_ID INT NOT NULL,
+    Client_ID INT NOT NULL,
     Hire_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Completed_Date TIMESTAMP NULL,
     Rating INT CHECK (rating BETWEEN 1 AND 5),
-    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID)
+    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID) ON DELETE CASCADE;
+    FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID) ON DELETE CASCADE;
 );

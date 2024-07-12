@@ -37,6 +37,8 @@ const PostJob = () => {
     const [applicationDeadline, setApplicationDeadline] = useState("");
     const [experienceLevel, setExperienceLevel] = useState("");
     const [jobLocation, setJobLocation] = useState("");
+    const [jobSalary, setJobSalary] = useState("");
+
 
 
     const handleJobType = (event) => {
@@ -76,6 +78,8 @@ const PostJob = () => {
         data.append("Application_Deadline", applicationDeadline) 
         data.append("Experience_Level", experienceLevel)
         data.append("Job_Location", jobLocation)
+        data.append("Job_Salary", jobSalary)
+
 
         for (let [key, value] of data.entries()) {
             console.log(key, value);
@@ -117,8 +121,6 @@ const PostJob = () => {
                                 </Label>
                                 <div
                                     className="flex gap-x-5 pl-4"
-                                    
-                                    onChange={handleJobType}
                                 >
                                     <div className="flex items-center gap-x-2">
                                         <input
@@ -268,6 +270,12 @@ const PostJob = () => {
                                 Location
                             </Label>
                             <Input onChange={(e) => setJobLocation(e.target.value)} name="jobLocation" id="job-location" placeholder="Enter Job Location" required />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label className="text-xl" htmlFor="jobSalary">
+                                Job Salary /per Month/
+                            </Label>
+                            <Input onChange={(e) => setJobSalary(e.target.value)} name="jobSalary" id="job-title" placeholder="Enter Salary per month" required />
                         </div>
                         <div className="flex justify-end">
                             <Button type="submit">Post Job</Button>

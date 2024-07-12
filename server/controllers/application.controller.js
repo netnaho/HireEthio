@@ -11,12 +11,11 @@ export const handleViewApplicantsForSpecificJob = async (req, res) => {
 
         // Insert the new job into the database
         const [result] = await connection.execute(
-            'SELECT f.FirstName, f.LastName, f.Proffession, a.Cover_Letter FROM applications a JOIN freelancer f ON a.Freelancer_ID = f.Freelancer_ID WHERE a.Job_ID = ?',
+            'SELECT f.FirstName, f.LastName, f.Proffession, a.Cover_Letter, a.status, a.Application_ID FROM applications a JOIN freelancer f ON a.Freelancer_ID = f.Freelancer_ID WHERE a.Job_ID = ?',
             [jobID]
         );
 
         connection.release(); // Release the connection back to the pool
-        
         res.json(result);
     } catch (error) {
         console.error('Database query error:', error);

@@ -46,7 +46,7 @@ const NavBar = () => {
                     <Link to="/posts">Job posts</Link>
                   </li>
                   <li>
-                    <Link to="/applicants">Applicants</Link>
+                    <Link to="/active">Active Jobs</Link>
                   </li>
                   <li>
                     <Link to="/messages">Messages</Link>

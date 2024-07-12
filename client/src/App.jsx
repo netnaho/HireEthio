@@ -18,6 +18,7 @@ import Profile from "./pages/Profile";
 import ClientSignup from "./pages/ClientSignUp";
 import FreelancerSignUp from "./pages/FreelancerSignUp";
 import PostJob from "./pages/PostJob";
+import ActiveJobs from "./pages/ActiveJobs"
 
 function App() {
   const Layout = () => {
@@ -97,6 +98,10 @@ function App() {
         {
           path: "/application",
           element: <Application />,
+        },
+        {
+          path: "/active",
+          element: <ActiveJobs />,
         },
       ],
     },

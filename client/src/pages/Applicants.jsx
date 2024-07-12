@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState }  from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Accordion,
@@ -8,10 +8,58 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { useLocation } from "react-router-dom";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Applicants = () => {
+  const [clientID, setClientID] = useState(1)
   const location = useLocation();
   const { applicants } = location.state || { applicants: [] };
+  const navigate = useNavigate();
+
+  const handleApplicantsHire = async (event)  => {
+    event.preventDefault();
+    const applicationID = event.target.value;
+    console.log(applicationID);
+
+    try{
+      const response = await axios.get(`http://localhost:8000/api/hire/hireApplicant`,{
+        params: {
+          Application_ID: applicationID,
+          Client_ID: clientID
+        }
+      });
+      if(response.data.message == 1){
+          navigate(0);
+      } else{
+        alert("you should refresh might not really be Deleted");
+      }
+    } catch (e) {
+        alert("it looks like something is wrong!");
+        console.error(e.message)
+    }
+  }
+
+  const handleApplicationReject = async (event)  => {
+    event.preventDefault();
+    const applicationID = event.target.value;
+    console.log(applicationID);
+
+    try{
+      const response = await axios.get(`http://localhost:8000/api/hire/rejectApplication`,{
+        params: {
+          Application_ID: applicationID,
+        }
+      });
+      if(response.data.message == 1){
+          navigate('/posts');
+      } else{
+        alert("you should refresh might not really be Deleted");
+      }
+    } catch (e) {
+        alert("it looks like something is wrong!");
+        console.error(e.message)
+    }
+  }
 
   return (
     <div>
@@ -50,11 +98,31 @@ const Applicants = () => {
                 </Accordion>
               </div>
               <div className="flex justify-between items-center mt-4">
-                <div className="flex gap-x-5">
-                  <Button className="bg-green-600">Hire</Button>
-                  <Button className="bg-blue-500">Message</Button>
+              <div className="flex gap-x-5">
+              {
+                applicant.status === "applied" ? (
+                  <Button
+                  onClick={handleApplicantsHire}
+                  value={applicant.Application_ID}
+                   className="bg-green-600">Hire</Button>
+                  ) : applicant.status === "accepted" ? (
+                    <div>Accepted</div>
+                      ) : (
+                        <div>Rejected</div>
+                        )
+              }
+                  <Button
+                   className="bg-blue-500">Message</Button>
                 </div>
-                <Button className="bg-red-500">Reject</Button>
+                {
+                applicant.status === "applied" ? (
+                  <Button 
+                    onClick={handleApplicationReject}
+                    value={applicant.Application_ID}
+                    className="bg-red-500">Reject</Button>
+                  ) : ""
+                  
+                }
               </div>
             </div>
           ))
