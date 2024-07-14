@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -10,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 
 const Applicant = ({
+  applicationId,
+  applicationStatus,
   freelancerId,
   freelancerFirstName,
   freelancerLastName,
@@ -18,7 +21,10 @@ const Applicant = ({
   coverLetter,
   jobTitle,
 }) => {
+  console.log("asdkd");
+  console.log(applicationStatus);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
   const isClient = userData
     ? userData.isLoggedIn && userData.userInfo.isClient
@@ -53,10 +59,55 @@ const Applicant = ({
       )
       .then((res) => {
         console.log(res.data);
+        navigate("/messages");
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleApplicantsHire = async () => {
+    console.log(applicationId, clientId, freelancerId);
+    const data = {
+      applicationId: applicationId,
+      clientId: clientId,
+      freelancerId: freelancerId,
+    };
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8800/api/hire/hireApplicant`,
+        data
+      );
+      if (response.data.message == 1) {
+        navigate(0);
+      } else {
+        alert("oops! There might be a problem please try again");
+      }
+    } catch (e) {
+      alert("it looks like something is wrong!");
+      console.error(e.message);
+    }
+  };
+
+  const handleApplicationReject = async () => {
+    console.log(applicationId);
+    const data = {
+      applicationId: applicationId,
+    };
+
+    try {
+      const response = await axios.post(
+        `http://localhost:8800/api/hire/rejectApplication`,
+        data
+      );
+      if (response.data.message == 1) {
+        navigate(0);
+      }
+    } catch (e) {
+      alert("it looks like something is wrong!");
+      console.error(e.message);
+    }
   };
   return (
     <div>
@@ -89,12 +140,39 @@ const Applicant = ({
         </div>
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-x-5">
-            <Button className="bg-green-600">Hire</Button>
+            {/* {applicationStatus === "applied " ? (
+              <Button
+                onClick={() => {
+                  handleApplicantsHire(applicationId);
+                }}
+                className="bg-green-600"
+              >
+                Hire
+              </Button>
+            ) : applicationStatus === "accepted" ? (
+              <div>Accepted</div>
+            ) : (
+              applicationStatus && console.log(applicationStatus, "nahom")
+            )} */}
+            {applicationStatus === "applied" ? (
+              <Button onClick={handleApplicantsHire} className="bg-green-600">
+                Hire
+              </Button>
+            ) : applicationStatus === "accepted" ? (
+              <div>Accepted</div>
+            ) : (
+              <div>Rejected</div>
+            )}
+
             <Button onClick={handleMessagePort} className=" bg-blue-500">
               Message
             </Button>
           </div>
-          <Button className=" bg-red-500">Reject</Button>
+          {applicationStatus === "applied" && (
+            <Button onClick={handleApplicationReject} className=" bg-red-500">
+              Reject
+            </Button>
+          )}
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -14,6 +15,7 @@ const SingleApplied = ({
   coverLetter,
   applicationId,
 }) => {
+  const navigate = useNavigate();
   const deleteHandler = async () => {
     axios
       .delete(
@@ -63,7 +65,14 @@ const SingleApplied = ({
         </div>
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-x-5">
-            <Button className=" bg-blue-500">Message</Button>
+            <Button
+              onClick={() => {
+                navigate("/messages");
+              }}
+              className=" bg-blue-500"
+            >
+              Message
+            </Button>
           </div>
           <Button onClick={deleteHandler} className=" bg-red-500">
             Delete Application

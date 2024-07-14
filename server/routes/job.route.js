@@ -4,6 +4,7 @@ import {
   getAllJobs,
   getClientJobs,
   deleteJob,
+  handleViewActiveJobs,
 } from "../controllers/job.controller.js";
 
 const router = express.Router();
@@ -12,6 +13,7 @@ router.post("/post-job", handleJobPost);
 router.get("/all-jobs", getAllJobs);
 router.get("/client-jobs/:id", getClientJobs);
 router.delete("/delete-job/:id", deleteJob);
+router.get("/ActiveJobs/:id", handleViewActiveJobs);
 // router.post("/login", handleLogin)
 // router.post("/logout", logout)
 

@@ -20,6 +20,7 @@ import ClientSignup from "./pages/ClientSignUp";
 import FreelancerSignUp from "./pages/FreelancerSignUp";
 import PostJob from "./pages/PostJob";
 import { useEffect, useState } from "react";
+import ActiveJobs from "./pages/ActiveJobs";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -110,6 +111,10 @@ function App() {
         {
           path: "/application",
           element: <Application />,
+        },
+        {
+          path: "/active-jobs",
+          element: <ActiveJobs />,
         },
       ],
     },

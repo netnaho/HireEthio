@@ -28,7 +28,7 @@ const Applicants = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [jobId]);
   console.log(jobApplicants);
   return (
     <div>
@@ -37,6 +37,8 @@ const Applicants = () => {
           return (
             <div key={index}>
               <Applicant
+                applicationId={applicant.Application_ID}
+                applicationStatus={applicant.status}
                 freelancerId={applicant.Freelancer_ID}
                 freelancerFirstName={applicant.FirstName}
                 freelancerLastName={applicant.LastName}

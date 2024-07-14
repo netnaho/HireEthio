@@ -154,7 +154,7 @@ const Messages = () => {
     <div className="">
       <ResizablePanelGroup
         direction="horizontal"
-        className="w-full rounded-lg border "
+        className="w-full min-h-[500px] rounded-lg border "
       >
         <ResizablePanel defaultSize={20}>
           <div className="flex flex-col">
