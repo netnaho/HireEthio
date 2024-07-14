@@ -29,7 +29,7 @@ const Applicants = () => {
         }
       });
       if(response.data.message == 1){
-          navigate(0);
+          navigate('/posts');
       } else{
         alert("you should refresh might not really be Deleted");
       }

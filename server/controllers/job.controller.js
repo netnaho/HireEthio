@@ -226,7 +226,7 @@ export const handleJobComplete = async (req, res) =>{
         
         if (result.affectedRows > 0){
             res.json({message: "1"})
-            console.log("successfull")
+            console.log("successfull");
         }
     } catch (error){
         console.error('Database query error:', error);
