@@ -1,5 +1,40 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ProfImg from "@/assets/Nahom.jpg";
 const Profile = () => {
+  const [userInfo, setUserInfo] = useState(null);
+
+  const userData = {
+    firstName: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.FirstName
+      : null,
+    lastName: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.LastName
+      : null,
+    profession: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Proffession
+      : null,
+    bio: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Bio
+      : null,
+    profilePic: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Profile_Picture
+      : null,
+    email: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Email
+      : null,
+  };
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        console.log(res.data);
+        setUserInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <div className="flex flex-col gap-y-7 mx-auto w-[80%] mb-10">
       <div className="flex gap-x-5 mx-auto w-full">
@@ -8,40 +43,34 @@ const Profile = () => {
           <div className=" px-6 py-5 relative">
             <div className="absolute -top-[57px] bg-[#d1e5df] w-[107px] h-[107px] flex justify-center items-center rounded-full">
               <div className="w-[100px] h-[100px] bg-sky-600 overflow-hidden rounded-full">
-                <img className="object-cover" src={ProfImg} alt="" />
+                <Avatar className="cursor-pointer w-full h-full">
+                  <AvatarImage
+                    src={`http://localhost:8800/images/${userData.profilePic}`}
+                  />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
               </div>
             </div>
 
             <div className="mt-[60px]">
-              <h1 className="text-xl font-semibold">Nahom Esayas</h1>
-              <p>Software Developer</p>
+              <h1 className="text-xl font-semibold">
+                {userData.firstName} {userData.lastName}
+              </h1>
+              <p>{userData.profession}</p>
               <div>Rating 5.0</div>
               <div className=" mt-4">
                 <h3 className="font-semibold text-lg">About</h3>
-                <p>
-                  Hi, I&apos;m Nahom Esayas! I am a passionate software
-                  developer with expertise in web development and UI/UX design.
-                  I have a strong background in creating user-friendly and
-                  visually appealing websites that meet the needs of
-                  organizations. From website navigation and layout to web
-                  hosting and security architecture, I handle all aspects of the
-                  development process. With 2 years of experience in the
-                  industry, I have successfully delivered projects that have
-                  made a positive impact. I am dedicated to staying up-to-date
-                  with the latest technologies and continuously improving my
-                  skills. When I&apos;m not coding, you can find me exploring
-                  new technologies, reading tech blogs, or contributing to
-                  open-source projects. Let&apos;s connect and discuss how I can
-                  contribute to your next project!
-                </p>
+                <p>{userData.bio}</p>
               </div>
             </div>
           </div>
         </div>
         <div className="w-[30%] h-fit rounded-md shadow-lg p-4 shadow-slate-400">
-          <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">
-            <h3 className="font-semibold text-lg">Contact Info</h3>
-            <span>Add</span>
+          <div>
+            <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">
+              <h3 className="font-semibold text-lg">Contact Info</h3>
+              <span>Add</span>
+            </div>
           </div>
 
           <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">

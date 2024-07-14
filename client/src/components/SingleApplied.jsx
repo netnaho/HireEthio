@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Accordion,
@@ -7,7 +8,25 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 
-const SingleApplied = () => {
+const SingleApplied = ({
+  jobTitle,
+  clientName,
+  coverLetter,
+  applicationId,
+}) => {
+  const deleteHandler = async () => {
+    axios
+      .delete(
+        `http://localhost:8800/api/apply/delete-application/${applicationId}`
+      )
+      .then((res) => {
+        console.log(res);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div>
       <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
@@ -26,10 +45,8 @@ const SingleApplied = () => {
         </div> */}
         <div className="flex justify-between">
           <div className="flex flex-col">
-            <h1 className="font-bold text-2xl">
-              Job Title: Senior Angular developer
-            </h1>
-            <h2>Daftech Computer Engineering</h2>
+            <h1 className="font-bold text-2xl">Job Title: {jobTitle}</h1>
+            <h2>{clientName}</h2>
           </div>
 
           <div>
@@ -40,19 +57,7 @@ const SingleApplied = () => {
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
               <AccordionTrigger>Application cover letter</AccordionTrigger>
-              <AccordionContent>
-                Dear Hiring Manager, I am writing to express my strong interest
-                in the Senior Angular Developer position at your company. With
-                my extensive experience in Angular development and my passion
-                for creating innovative web applications, I am confident that I
-                would be a valuable asset to your team. Over the past [number of
-                years] years, I have been actively involved in developing
-                complex web applications using Angular. I have a deep
-                understanding of Angular concepts, including components,
-                services, modules, and routing. My experience includes working
-                on projects that involve integrating Angular with backend APIs,
-                implementing responsive designs, and optimizing performance.
-              </AccordionContent>
+              <AccordionContent>{coverLetter}</AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>
@@ -60,7 +65,9 @@ const SingleApplied = () => {
           <div className="flex gap-x-5">
             <Button className=" bg-blue-500">Message</Button>
           </div>
-          <Button className=" bg-red-500">Delete Application</Button>
+          <Button onClick={deleteHandler} className=" bg-red-500">
+            Delete Application
+          </Button>
         </div>
       </div>
     </div>

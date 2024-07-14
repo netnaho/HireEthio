@@ -8,7 +8,8 @@ import path from "path";
 
 import authRoute from "./routes/auth.route.js";
 import jobRoute from "./routes/job.route.js";
-import { userInfo } from "os";
+import applyRoute from "./routes/application.route.js";
+import messageRoute from "./routes/message.route.js";
 
 const app = express();
 
@@ -55,6 +56,8 @@ app.use(
 
 app.use("/api/auth", authRoute);
 app.use("/api/job", jobRoute);
+app.use("/api/apply", applyRoute);
+app.use("/api/message", messageRoute);
 
 app.get("/check", (req, res) => {
   if (req.session.userInfo) {

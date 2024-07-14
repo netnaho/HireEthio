@@ -1,7 +1,15 @@
 import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Profile1 from "@/assets/Profile2.jpg";
 
-const SingleMessage = () => {
+const SingleMessage = ({
+  messagePortalId,
+  clientId,
+  freelancerId,
+  profilePic,
+  firstName,
+  lastName,
+}) => {
   const [message, setMessage] = useState(
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. dolorum aut dignissimos similique assumenda quos"
   );
@@ -17,14 +25,13 @@ const SingleMessage = () => {
                 />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar> */}
-        <img
-          src={Profile1}
-          alt=""
-          className=" object-cover w-14 h-14 rounded-full"
-        />
+        <Avatar className="cursor-pointer">
+          <AvatarImage src={`http://localhost:8800/images/${profilePic}`} />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold text-blue-800">
-            Samson Abayneh
+            {firstName} {lastName}
           </h2>
           <p className=" text-sm text-slate-500 text-nowrap">
             {message.substring(0, 50)}...

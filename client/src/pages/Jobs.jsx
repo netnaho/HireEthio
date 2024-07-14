@@ -395,6 +395,7 @@ const Jobs = () => {
                       salary={job.Salary}
                       experience={job.Experience_Level}
                       deadline={job.Application_Deadline}
+                      jobId={job.Job_ID}
                     />
                   </div>
                 );

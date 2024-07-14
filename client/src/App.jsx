@@ -92,7 +92,7 @@ function App() {
           element: <Message />,
         },
         {
-          path: "/applicants",
+          path: "/applicants/:id",
           element: <Applicants />,
         },
         {

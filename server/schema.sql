@@ -34,6 +34,8 @@ CREATE TABLE Jobs (
     Application_Deadline DATE NOT NULL,
     Experience_Level ENUM('expert', 'senior', 'intermediate', 'junior', 'entry') NOT NULL,
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Salary VARCHAR(255),
+    Location VARCHAR(255),
     FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID)
 );
 -- applications 
@@ -44,27 +46,40 @@ CREATE TABLE Applications (
     Cover_Letter TEXT,
     status ENUM('applied', 'accepted', 'rejected') DEFAULT 'applied',
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (Job_ID) REFERENCES Jobs(Job_ID),
-    FOREIGN KEY (Freelancer_ID) REFERENCES Freelancer(Freelancer_ID)
+    FOREIGN KEY (Job_ID) REFERENCES Jobs(Job_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Freelancer_ID) REFERENCES Freelancer(Freelancer_ID) ON DELETE CASCADE
 );
 -- messages
 CREATE TABLE Messages (
     Message_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Application_ID INT NOT NULL,
+    MessagePortal_ID INT NOT NULL,
     Sender_ID INT NOT NULL,
     Sender_Type ENUM('client', 'freelancer') NOT NULL,
     Receiver_ID INT NOT NULL,
     Receiver_Type ENUM('client', 'freelancer') NOT NULL,
     Content TEXT NOT NULL,
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID)
+    FOREIGN KEY (MessagePortal_ID) REFERENCES MessagePortal(MessagePortal_ID) ON DELETE CASCADE
 );
+--messagePortal
+CREATE TABLE MessagePortal (
+    MessagePortal_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Client_ID INT NOT NULL,
+    Freelancer_ID INT NOT NULL,
+    FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Freelancer_ID) REFERENCES Freelancer(Freelancer_ID) ON DELETE CASCADE
+    );
 -- hires
 CREATE TABLE Hires (
     Hire_ID INT AUTO_INCREMENT PRIMARY KEY,
     Application_ID INT NOT NULL,
+    Client_ID INT NOT NULL,
+    Freelancer_ID INT NOT NULL,
     Hire_Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Completed_Date TIMESTAMP NULL,
-    Rating INT CHECK (rating BETWEEN 1 AND 5),
-    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID)
+    Rating INT CHECK (Rating BETWEEN 1 AND 5),
+    isCompleted BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (Application_ID) REFERENCES Applications(Application_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID) ON DELETE CASCADE,
+    FOREIGN KEY (Freelancer_ID) REFERENCES Freelancer(Freelancer_ID) ON DELETE CASCADE
 );

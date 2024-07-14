@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 import { Button } from "@/components/ui/button";
 
-const Job = ({
+const ClientJob = ({
   jobTitle,
   clientName,
   postedAt,
@@ -32,12 +32,7 @@ const Job = ({
     experience: experience,
     deadline: deadline,
   };
-
-  const goToApplication = (job) => {
-    navigate("/application", { state: { job } });
-  };
-  // const location = useLocation();
-  // console.log(location);
+  console.log(clientName);
   return (
     <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono hover:bg-slate-100 duration-75">
       {/* Job Title */}
@@ -65,7 +60,7 @@ const Job = ({
         </div>
         {/* Job type and Job site */}
         <div className=" bg-slate-200 px-2 py-1 rounded-full">
-          {`${jobSite} - ${jobType}`}
+          {jobSite} - {jobType}
         </div>
       </div>
       {/* Job related Info-3 */}
@@ -86,18 +81,30 @@ const Job = ({
           <span>{format(parseISO(deadline), "MMMM dd, yyyy")}</span>
         </div>
         {/* Apply button */}
+        <div className="flex flex-col">
+          <Link
+            to={
+              location.pathname === "/jobs"
+                ? "/application"
+                : `/applicants/${jobId}`
+            }
+          >
+            <Button className={`bg-[#38A3A5] px-4 w-[250px] mb-4`}>
+              Applicants
+            </Button>
+          </Link>
 
-        <Button
-          onClick={() => goToApplication(job)}
-          className={`${
-            location.pathname === "/jobs" ? "bg-[#38A3A5]" : "bg-red-500"
-          } px-4 w-[250px]`}
-        >
-          {location.pathname === "/jobs" ? "Apply" : "Delete Job"}
-        </Button>
+          <Button
+            className={`${
+              location.pathname === "/jobs" ? "bg-[#38A3A5]" : "bg-red-500"
+            } px-4 w-[250px]`}
+          >
+            {location.pathname === "/jobs" ? "Apply" : "Delete Job"}
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Job;
+export default ClientJob;
