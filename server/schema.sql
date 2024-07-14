@@ -36,7 +36,7 @@ CREATE TABLE Jobs (
     Created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Salary VARCHAR(255),
     Location VARCHAR(255),
-    FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID)
+    FOREIGN KEY (Client_ID) REFERENCES Client(Client_ID) ON DELETE CASCADE
 );
 -- applications 
 CREATE TABLE Applications (

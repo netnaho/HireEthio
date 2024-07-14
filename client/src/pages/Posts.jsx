@@ -1,9 +1,9 @@
 import Job from "@/components/ClientJob";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios, { all } from "axios";
 
 const Posts = () => {
-  const [allClientJobs, setAllClientJobs] = useState(null);
+  const [allClientJobs, setAllClientJobs] = useState([]);
   const [userData, setUserData] = useState(null);
 
   const clientId = userData
@@ -37,10 +37,14 @@ const Posts = () => {
       });
   }, [clientId]);
   return (
-    <div>
+    <div className="h-[70vh]">
       <div className="flex flex-col w-[80%] mx-auto">
         <div className="rounded-md mb-5 shadow-sm shadow-slate-700">
-          {allClientJobs &&
+          {allClientJobs.length === 0 ? (
+            <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
+              No Active Jobs found.
+            </div>
+          ) : (
             allClientJobs.map((job, index) => {
               return (
                 <div key={index}>
@@ -60,7 +64,8 @@ const Posts = () => {
                   />
                 </div>
               );
-            })}
+            })
+          )}
         </div>
       </div>
     </div>

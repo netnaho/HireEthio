@@ -4,16 +4,18 @@ import ActiveJob from "@/components/ActiveJob";
 import { useNavigate } from "react-router-dom";
 
 const ActiveJobs = () => {
-  const navigate = useNavigate;
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [response, setResponse] = useState([]);
+  const [jobs, setJobs] = useState([]);
 
-  const clientId = userData
-    ? userData.isLoggedIn && userData.userInfo.userData.Client_ID
+  const clientId = userData?.isLoggedIn
+    ? userData.userInfo.userData.Client_ID
     : null;
+
   axios.defaults.withCredentials = true;
+
   useEffect(() => {
     axios
       .get("http://localhost:8800/check")
@@ -25,15 +27,15 @@ const ActiveJobs = () => {
   }, []);
 
   useEffect(() => {
+    if (!clientId) return;
+
     const fetchJobs = async () => {
       try {
-        setResponse(
-          await axios.get(
-            `http://localhost:8800/api/job/ActiveJobs/${clientId}`
-          )
+        const response = await axios.get(
+          `http://localhost:8800/api/job/ActiveJobs/${clientId}`
         );
+        setJobs(response.data); // Assuming response.data is an array of jobs
         setLoading(false);
-        console.log(response.data);
       } catch (e) {
         console.log(e);
         setError(e);
@@ -51,10 +53,15 @@ const ActiveJobs = () => {
   if (error) {
     return <div>Error</div>;
   }
+
   return (
-    <div>
-      {response && // <div>No Active Jobs found.</div>
-        response.data.map((job, index) => {
+    <div className="h-[70vh]">
+      {jobs.length === 0 ? (
+        <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
+          No Active Jobs found.
+        </div>
+      ) : (
+        jobs.map((job, index) => (
           <div key={index}>
             <ActiveJob
               hireId={job.Hire_ID}
@@ -64,11 +71,12 @@ const ActiveJobs = () => {
               firstName={job.Freelancer_FirstName}
               lastName={job.Freelancer_LastName}
               profilePic={job.Profile_Picture}
-              profession={job.Proffession}
+              profession={job.Profession}
               coverLetter={job.Cover_Letter}
             />
-          </div>;
-        })}
+          </div>
+        ))
+      )}
     </div>
   );
 };

@@ -21,6 +21,26 @@ const ActiveJob = ({
   profession,
   coverLetter,
 }) => {
+  const navigate = useNavigate();
+  const handleJobComplete = async (event) => {
+    const data = {
+      hireId: hireId,
+    };
+    try {
+      const response = await axios.post(
+        `http://localhost:8800/api/job/CompleteJob`,
+        data
+      );
+      if (response.data.message == "1") {
+        alert("Completed!!!");
+        navigate(0);
+      }
+    } catch (error) {
+      console.error(error.message);
+      alert("Something wrong please refresh and try again");
+    }
+  };
+
   return (
     <div>
       <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
@@ -56,7 +76,9 @@ const ActiveJob = ({
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-x-5"></div>
 
-          <Button className=" bg-blue-500">Complete</Button>
+          <Button onClick={handleJobComplete} className=" bg-blue-500">
+            Complete
+          </Button>
         </div>
       </div>
     </div>

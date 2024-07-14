@@ -116,7 +116,8 @@ export const handleViewActiveJobs = async (req, res) => {
           f.LastName AS Freelancer_LastName,
           f.Profile_Picture,
           f.Proffession,
-          f.Freelancer_ID
+          f.Freelancer_ID,
+          a.Cover_Letter
       FROM 
           hires h
       JOIN 
@@ -141,6 +142,30 @@ export const handleViewActiveJobs = async (req, res) => {
     console.log("success");
     console.log(result);
     res.json(result);
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+export const handleJobComplete = async (req, res) => {
+  console.log("we are Completing the job you requested to complete");
+  const { hireId } = req.body;
+  console.log(hireId);
+
+  try {
+    // retrieve the active jobs from the database
+    const [result] = await pool.query(
+      `
+          UPDATE hires SET Completed_Date = CURDATE() WHERE Hire_ID = ?
+          `,
+      [hireId]
+    );
+
+    if (result.affectedRows > 0) {
+      res.json({ message: "1" });
+      console.log("successfull");
+    }
   } catch (error) {
     console.error("Database query error:", error);
     res.status(500).send("Internal server error");

@@ -9,7 +9,7 @@ import multer from "multer";
 const router = express.Router();
 const upload = multer();
 
-router.get("/viewHired", handleViewHired);
+router.get("/viewHired/:id", handleViewHired);
 router.post("/hireApplicant", handleHireApplicant);
 router.post("/rejectApplication", handleRejectApplication);
 

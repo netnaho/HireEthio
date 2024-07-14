@@ -11,7 +11,7 @@ import Posts from "./pages/Posts";
 import Messages from "./pages/Messages";
 import Message from "./pages/Message";
 import Applicants from "./pages/Applicants";
-import Hires from "./pages/Hires";
+import Hires from "./components/Hire";
 import JobHires from "./pages/JobHires";
 import JobsApplied from "./pages/JobsApplied";
 import Application from "./pages/Application";
@@ -102,7 +102,7 @@ function App() {
         },
         {
           path: "/hires",
-          element: <Hires />,
+          element: <JobHires />,
         },
         {
           path: "/contracts",

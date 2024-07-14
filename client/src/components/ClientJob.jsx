@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,18 @@ const ClientJob = ({
     deadline: deadline,
   };
   console.log(clientName);
+
+  const handleJobDelete = async () => {
+    axios
+      .delete(`http://localhost:8800/api/job/delete-job/${jobId}`)
+      .then((res) => {
+        console.log(res);
+        navigate(0);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono hover:bg-slate-100 duration-75">
       {/* Job Title */}
@@ -95,11 +108,10 @@ const ClientJob = ({
           </Link>
 
           <Button
-            className={`${
-              location.pathname === "/jobs" ? "bg-[#38A3A5]" : "bg-red-500"
-            } px-4 w-[250px]`}
+            onClick={handleJobDelete}
+            className="bg-red-500 px-4 w-[250px]"
           >
-            {location.pathname === "/jobs" ? "Apply" : "Delete Job"}
+            Delete Job
           </Button>
         </div>
       </div>
