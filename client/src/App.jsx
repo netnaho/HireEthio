@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Jobs from "./pages/Jobs";
 import Posts from "./pages/Posts";
 import Messages from "./pages/Messages";
-import Message from "./pages/Message";
+import Message from "./components/Message";
 import Applicants from "./pages/Applicants";
 import Hires from "./components/Hire";
 import JobHires from "./pages/JobHires";
@@ -21,6 +21,7 @@ import FreelancerSignUp from "./pages/FreelancerSignUp";
 import PostJob from "./pages/PostJob";
 import { useEffect, useState } from "react";
 import ActiveJobs from "./pages/ActiveJobs";
+import Contracts from "./pages/Contracts";
 
 function App() {
   const [userInfo, setUserInfo] = useState(null);
@@ -106,7 +107,7 @@ function App() {
         },
         {
           path: "/contracts",
-          element: <JobHires />,
+          element: <Contracts />,
         },
         {
           path: "/application",

@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { formatDistanceToNow, parseISO, format } from "date-fns";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,8 @@ const Job = ({
   experience,
   deadline,
   jobId,
+  freelancerId,
+  isLoggedIn,
 }) => {
   const navigate = useNavigate();
   const job = {
@@ -33,16 +36,55 @@ const Job = ({
     deadline: deadline,
   };
 
+  const applicationDatePassed = () => {
+    const applicationDate = new Date(deadline);
+    const currentDate = new Date();
+    if (currentDate > applicationDate) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const goToApplication = (job) => {
-    navigate("/application", { state: { job } });
+    const data = {
+      jobId: jobId,
+      freelancerId: freelancerId,
+    };
+    if (applicationDatePassed()) {
+      alert("Sorry, Application date has passed!!");
+    } else {
+      axios
+        .post(`http://localhost:8800/api/apply/check-applicant`, data)
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.isApplied) {
+            alert("You have already applied to this job");
+          } else {
+            navigate("/application", { state: { job: job } });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
   // const location = useLocation();
   // console.log(location);
   return (
     <div className="flex flex-col gap-y-4 border-b-[1px] border-slate-300 py-6 mb-4 px-5 font-mono hover:bg-slate-100 duration-75">
       {/* Job Title */}
-      <div>
+      <div className="flex justify-between items-center">
         <h1 className="font-bold text-2xl">{jobTitle}</h1>
+        <div>
+          {applicationDatePassed() && (
+            <>
+              <div className=" bg-red-400/70 px-4 py-1 text-white rounded-full shadow-md shadow-red-600">
+                expired
+              </div>
+            </>
+          )}
+        </div>
       </div>
       {/* Job related Info-1 */}
       <div className="flex gap-x-8">

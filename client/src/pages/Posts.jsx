@@ -37,7 +37,7 @@ const Posts = () => {
       });
   }, [clientId]);
   return (
-    <div className="h-[70vh]">
+    <div className="min-h-[70vh]">
       <div className="flex flex-col w-[80%] mx-auto">
         <div className="rounded-md mb-5 shadow-sm shadow-slate-700">
           {allClientJobs.length === 0 ? (

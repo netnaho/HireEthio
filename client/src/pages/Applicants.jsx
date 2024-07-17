@@ -5,7 +5,7 @@ import Applicant from "@/components/Applicant";
 
 const Applicants = () => {
   // const [userInfo, setUserInfo] = useState(null);
-  const [jobApplicants, setJobApplicants] = useState(null);
+  const [jobApplicants, setJobApplicants] = useState([]);
   const { id } = useParams();
   const jobId = id;
   axios.defaults.withCredentials = true;
@@ -31,8 +31,8 @@ const Applicants = () => {
   }, [jobId]);
   console.log(jobApplicants);
   return (
-    <div>
-      {jobApplicants &&
+    <div className="min-h-[70vh]">
+      {jobApplicants.length !== 0 ? (
         jobApplicants.map((applicant, index) => {
           return (
             <div key={index}>
@@ -46,10 +46,23 @@ const Applicants = () => {
                 profilePic={applicant.Profile_Picture}
                 coverLetter={applicant.Cover_Letter}
                 jobTitle={applicant.Job_Title}
+                email={applicant.Email}
+                username={applicant.Username}
+                bio={applicant.Bio}
+                resume={applicant.Resume}
               />
             </div>
           );
-        })}
+        })
+      ) : (
+        <>
+          <div className="min-h-[70vh]">
+            <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
+              No Applicants for this job.
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

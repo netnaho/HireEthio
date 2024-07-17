@@ -73,6 +73,10 @@ export const getJobApplicants = async (req, res) => {
     f.LastName,
     f.Proffession,
     f.Profile_Picture,
+    f.Username,
+    f.Email,
+    f.Bio,
+    f.Resume,
     j.Job_Title
 FROM 
     Applications a
@@ -87,5 +91,32 @@ WHERE
     return res.json(rows);
   } catch (error) {
     console.log(error);
+  }
+};
+
+// export const checkApplicationStaus = async (req, res) => {
+//   const applicationId = req.params.id;
+//   try {
+//     const [rows] = await pool.query(``
+//   }
+// }
+
+export const checkApplicant = async (req, res) => {
+  const { jobId, freelancerId } = req.body;
+  console.log(jobId, freelancerId);
+  // WHERE Job_ID = ? AND
+  try {
+    const [rows] = await pool.query(
+      `SELECT * FROM applications WHERE Job_ID = ? AND Freelancer_ID = ?`,
+      [jobId, freelancerId]
+    );
+    if (rows.length > 0) {
+      console.log(rows);
+      return res.json({ isApplied: true, info: rows });
+    } else {
+      return res.json({ isApplied: false });
+    }
+  } catch (err) {
+    res.status(400).json(err.message);
   }
 };

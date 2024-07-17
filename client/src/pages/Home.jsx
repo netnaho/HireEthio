@@ -15,10 +15,7 @@ const Home = () => {
       .catch((err) => console.log(err));
   }, []);
   return (
-    <div>
-      <button>click</button>
-      {userData && <>{userData.isLoggedIn}</>}
-    </div>
+    <div className="min-h-[70vh]">{userData && <>{userData.isLoggedIn}</>}</div>
   );
 };
 

@@ -9,12 +9,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import SingleMessage from "@/components/SingleMessage";
-import Message from "./Message";
+import Message from "@/components/Message";
 
 const Messages = () => {
   const [re, setRe] = useState(0);
   const [userData, setUserData] = useState(null);
-  const [chatList, setChatList] = useState(null);
+  const [chatList, setChatList] = useState([]);
   const [messages, setMessages] = useState(null);
   const [content, setContent] = useState("");
   const [portalId, setPortalId] = useState("");
@@ -158,7 +158,7 @@ const Messages = () => {
       >
         <ResizablePanel defaultSize={20}>
           <div className="flex flex-col">
-            {chatList &&
+            {chatList.length !== 0 ? (
               chatList.map((chat, index) => {
                 return (
                   <div key={index}>
@@ -183,7 +183,16 @@ const Messages = () => {
                     </button>
                   </div>
                 );
-              })}
+              })
+            ) : (
+              <>
+                <div className="min-h-[70vh]">
+                  <div className="flex flex-col w-[98%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
+                    No created chats.
+                  </div>
+                </div>
+              </>
+            )}
 
             {/* <SingleMessage />
             <SingleMessage />

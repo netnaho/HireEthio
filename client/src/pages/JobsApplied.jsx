@@ -4,7 +4,7 @@ import axios from "axios";
 
 const JobsApplied = () => {
   const [userInfo, setUserInfo] = useState(null);
-  const [jobsApplied, setJobsApplied] = useState(null);
+  const [jobsApplied, setJobsApplied] = useState([]);
   const freelancerId = userInfo
     ? userInfo.isLoggedIn && userInfo.userInfo.userData.Freelancer_ID
     : null;
@@ -34,7 +34,7 @@ const JobsApplied = () => {
 
   return (
     <div className="flex flex-col min-h-[70vh]">
-      {jobsApplied &&
+      {jobsApplied.length !== 0 ? (
         jobsApplied.map((job, index) => {
           return (
             <div key={index}>
@@ -43,10 +43,20 @@ const JobsApplied = () => {
                 clientName={job.Username}
                 coverLetter={job.Cover_Letter}
                 applicationId={job.Application_ID}
+                status={job.status}
               />
             </div>
           );
-        })}
+        })
+      ) : (
+        <>
+          <div className="min-h-[70vh]">
+            <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
+              You haven&apos;t applied yet.
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

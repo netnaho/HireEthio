@@ -27,7 +27,7 @@ const upload = multer({
 
 router.post(
   "/freelancer-register",
-  upload.single("profile-pic"),
+  upload.array("files"),
   handleFreelancerRegister
 );
 router.post(

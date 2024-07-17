@@ -14,6 +14,7 @@ const SingleApplied = ({
   clientName,
   coverLetter,
   applicationId,
+  status,
 }) => {
   const navigate = useNavigate();
   const deleteHandler = async () => {
@@ -29,6 +30,7 @@ const SingleApplied = ({
         console.log(err);
       });
   };
+  console.log(status);
   return (
     <div>
       <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
@@ -52,7 +54,21 @@ const SingleApplied = ({
           </div>
 
           <div>
-            <span className=" text-amber-400">Pending...</span>
+            {status === "applied" && (
+              <span className="bg-yellow-500/90 text-black font-semibold opacity-65 px-4 py-2 rounded-full shadow-lg shadow-yellow-400">
+                Pending...
+              </span>
+            )}
+            {status === "accepted" && (
+              <span className="bg-green-500/90 text-black font-semibold opacity-65 px-4 py-2 rounded-full shadow-lg shadow-green-400">
+                Accepted
+              </span>
+            )}
+            {status === "rejected" && (
+              <span className="bg-red-500/90 text-black font-semibold opacity-65 px-4 py-2 rounded-full shadow-lg shadow-red-400">
+                Rejected
+              </span>
+            )}
           </div>
         </div>
         <div>

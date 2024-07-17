@@ -32,6 +32,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);`,
         location,
       ]
     );
+    console.log(rows);
     return res.json(rows);
   } catch (error) {
     console.log(error);

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Hire from "@/components/Hire";
+import Contract from "@/components/Contract";
 
-const JobHires = () => {
+const Contracts = () => {
   const [userData, setUserData] = useState(null);
   const [hires, setHires] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const clientId = userData
-    ? userData.isLoggedIn && userData.userInfo.userData.Client_ID
+  const freelancerId = userData
+    ? userData.isLoggedIn && userData.userInfo.userData.Freelancer_ID
     : null;
 
   axios.defaults.withCredentials = true;
@@ -24,13 +24,15 @@ const JobHires = () => {
   }, []);
 
   useEffect(() => {
+    console.log("nahmm", freelancerId);
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8800/api/hire/viewHired/${clientId}`
+          `http://localhost:8800/api/hire/view-contracts/${freelancerId}`
         );
         setHires(response.data);
         console.log("nahom");
+        console.log(response.data);
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -40,19 +42,7 @@ const JobHires = () => {
     };
 
     fetchJobs();
-  }, [clientId]);
-
-  if (!hires) {
-    return (
-      <>
-        <div className="min-h-[70vh]">
-          <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
-            No Hires Found
-          </div>
-        </div>
-      </>
-    );
-  }
+  }, [freelancerId]);
   return (
     <div className="min-h-[70vh]">
       <div className="flex flex-col w-[70%] mx-auto shadow-sm shadow-slate-400 rounded-md p-4 m-4">
@@ -64,7 +54,7 @@ const JobHires = () => {
           hires.map((hire, index) => {
             return (
               <div key={index}>
-                <Hire
+                <Contract
                   applicationId={hire.Application_ID}
                   hireDate={hire.Hire_Date}
                   completedDate={hire.Completed_Date}
@@ -84,4 +74,4 @@ const JobHires = () => {
   );
 };
 
-export default JobHires;
+export default Contracts;

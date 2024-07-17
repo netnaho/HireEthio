@@ -45,6 +45,51 @@ export const handleViewHired = async (req, res) => {
   }
 };
 
+export const handleViewContracts = async (req, res) => {
+  console.log("We are fetching your Applicants from database");
+  const freelancer_ID = req.params.id; // get the jobID from the request parameters
+  console.log(freelancer_ID);
+
+  // Sql Query that retrives the application ID, hire_Date, Completed_Date, Rating first_Name and Last_Name of freelancer
+  // also the job title and job description from the database for a specific user
+  const sqlQuery = `
+        SELECT 
+            h.Application_ID,
+            h.Hire_Date,
+            h.Completed_Date,
+            h.Rating,
+            c.FirstName,
+            c.LastName,
+            c.Profile_Picture,
+            j.Job_Title,
+            j.Job_Description
+        FROM 
+            hires h
+        JOIN 
+            applications a ON h.Application_ID = a.Application_ID
+        JOIN 
+            client c ON h.Client_ID = c.Client_ID
+        JOIN 
+            jobs j ON a.Job_ID = j.Job_ID
+        WHERE 
+            h.Freelancer_ID = ?;
+    `;
+
+  try {
+    // Get a connection from the pool
+
+    // Insert the new job into the database
+    const [result] = await pool.query(sqlQuery, [freelancer_ID]);
+
+    // Release the connection back to the pool
+
+    res.json(result);
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
 export const handleHireApplicant = async (req, res) => {
   console.log("we are hiring your applicant");
   const { applicationId, clientId, freelancerId } = req.body;
@@ -87,6 +132,27 @@ export const handleRejectApplication = async (req, res) => {
     const [result] = await pool.query(
       'UPDATE applications SET status = "rejected" WHERE Application_ID = ?',
       [applicationId]
+    );
+
+    if (result.affectedRows > 0) {
+      res.json({ message: "1" });
+      console.log("successfully hired");
+    } else {
+      res.json({ message: "2" });
+    }
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+export const rateFreelancer = async (req, res) => {
+  const { rating, applicationId } = req.body;
+  try {
+    // Insert the new job into the database
+    const [result] = await pool.query(
+      "UPDATE hires SET Rating = ? WHERE Application_ID = ?",
+      [rating, applicationId]
     );
 
     if (result.affectedRows > 0) {

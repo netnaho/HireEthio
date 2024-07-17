@@ -14,8 +14,8 @@ const SingleMessage = ({
     "Lorem ipsum dolor sit amet consectetur adipisicing elit. dolorum aut dignissimos similique assumenda quos"
   );
   return (
-    <div>
-      <div className="flex gap-x-6 mb-1 py-2 px-2 rounded-sm cursor-pointer hov min-w-[400px] items-center border-b-[1px] border-slate-300 bg-slate-50 hover:bg-sky-100 duration-300">
+    <div className="w-full">
+      <div className="flex gap-x-4 mb-1 py-2 px-2 rounded-sm cursor-pointer min-w-[400px] items-center border-b-[1px] border-slate-300 bg-slate-50 hover:bg-sky-100 duration-300">
         {/* <Avatar>
                 <AvatarImage
                   className="object-contain"
@@ -34,7 +34,7 @@ const SingleMessage = ({
             {firstName} {lastName}
           </h2>
           <p className=" text-sm text-slate-500 text-nowrap">
-            {message.substring(0, 50)}...
+            Click here to start chating
           </p>
         </div>
       </div>

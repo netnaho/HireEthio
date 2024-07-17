@@ -8,6 +8,24 @@ import Job from "../components/Job";
 const Jobs = () => {
   const [allJobs, setAllJobs] = useState(null);
   const [searchedJob, setSearchedJob] = useState("");
+  const [userData, setUserData] = useState(null);
+
+  const freelancerId = userData
+    ? userData.isLoggedIn && userData.userInfo.userData.Freelancer_ID
+    : null;
+  const isLoggedIn = userData ? (userData.isLoggedIn ? true : false) : false;
+  console.log(freelancerId);
+
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   useEffect(() => {
     axios
       .get("http://localhost:8800/api/job/all-jobs")
@@ -40,6 +58,9 @@ const Jobs = () => {
         console.log(err);
       });
   };
+  const handleFilter = () => {
+    const filteredJobs = allJobs;
+  };
   return (
     <div className="py-5">
       <div className="flex gap-x-14 px-10 justify-center">
@@ -50,7 +71,9 @@ const Jobs = () => {
             Filter Jobs
           </div>
           <div className="flex justify-between ">
-            <Button className=" bg-[#38A3A5] rounded-md">Filter</Button>
+            <Button onClick={handleFilter} className=" bg-[#38A3A5] rounded-md">
+              Filter
+            </Button>
             <Button variant="outline">Clear</Button>
           </div>
           <div>
@@ -396,6 +419,8 @@ const Jobs = () => {
                       experience={job.Experience_Level}
                       deadline={job.Application_Deadline}
                       jobId={job.Job_ID}
+                      freelancerId={freelancerId}
+                      isLoggedIn={isLoggedIn}
                     />
                   </div>
                 );

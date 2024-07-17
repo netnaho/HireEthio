@@ -73,6 +73,7 @@ const PostJob = () => {
     } else if (femaleChecked) {
       gender = "female";
     }
+    console.log(gender);
 
     setJobData((prevFormData) => ({
       ...prevFormData,
@@ -92,12 +93,13 @@ const PostJob = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("dhdk");
     console.log(sentJobData);
     axios
       .post("http://localhost:8800/api/job/post-job", sentJobData)
       .then((res) => {
         console.log(res.data);
-        navigate("/posts")
+        navigate("/posts");
       })
       .catch((err) => {
         console.log(err);
@@ -171,7 +173,12 @@ const PostJob = () => {
                   </Label>
                   <div className="flex gap-x-4 pl-4">
                     <div className="flex gap-x-2 items-center">
-                      <Checkbox id="male" onChange={handleCheckboxChange} />
+                      <Checkbox
+                        id="male"
+                        onChange={(e) => {
+                          handleCheckboxChange;
+                        }}
+                      />
                       <Label htmlFor="male">Male</Label>
                     </div>
                     <div className="flex gap-x-2 items-center">

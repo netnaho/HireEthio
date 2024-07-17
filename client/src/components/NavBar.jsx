@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [userData, setUserData] = useState(null);
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
@@ -54,6 +55,16 @@ const NavBar = () => {
       ? userData.isLoggedIn && userData.userInfo.isClient
       : false,
   };
+
+  if (currentUser.isClient) {
+    if (location.pathname == "/") {
+      navigate("/posts");
+    }
+  } else {
+    if (location.pathname == "/") {
+      navigate("/jobs");
+    }
+  }
 
   return (
     <div className=" bg-[#22577A] py-2 mb-10">
@@ -105,7 +116,9 @@ const NavBar = () => {
             </div>
           ) : (
             <>
-              <div>Explore Jobs</div>
+              <div>
+                <Link to="/jobs">Explore Jobs</Link>
+              </div>
             </>
           )
         ) : (
@@ -136,7 +149,7 @@ const NavBar = () => {
                     {profileOpen && (
                       <div
                         ref={profileRef}
-                        className=" bg-[#3d7b4c] absolute top-[45px] right-0 text-slate-300 w-[150px] flex flex-col py-3 px-2 rounded-[7px]"
+                        className=" bg-[#3d7b4c] z-30 absolute top-[45px] right-0 text-slate-300 w-[150px] flex flex-col py-3 px-2 rounded-[7px]"
                       >
                         <span
                           onClick={() => {

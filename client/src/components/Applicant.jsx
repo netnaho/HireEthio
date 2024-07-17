@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { FileDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Accordion,
@@ -20,6 +21,9 @@ const Applicant = ({
   profilePic,
   coverLetter,
   jobTitle,
+  username,
+  bio,
+  resume,
 }) => {
   console.log("asdkd");
   console.log(applicationStatus);
@@ -137,6 +141,17 @@ const Applicant = ({
               <AccordionContent>{coverLetter}</AccordionContent>
             </AccordionItem>
           </Accordion>
+          <div>
+            <a
+              className="flex items-center gap-x-2 my-3"
+              href={`http://localhost:8800/images/${resume}`}
+              target="_blank"
+              download="myfile.pdf"
+            >
+              <FileDown />
+              <span>Download Resume</span>
+            </a>
+          </div>
         </div>
         <div className="flex justify-between items-center mt-4">
           <div className="flex gap-x-5">

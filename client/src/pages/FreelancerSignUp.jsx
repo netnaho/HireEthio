@@ -32,6 +32,7 @@ const FreelancerSignUp = () => {
     profession: "",
     bio: "",
     profilePic: null,
+    resume: null,
   });
   const navigate = useNavigate();
   const {
@@ -43,10 +44,13 @@ const FreelancerSignUp = () => {
     profession,
     bio,
     profilePic,
+    resume,
   } = formData;
   const onChange = (e) => {
     if (e.target.name === "profilePic") {
       setFormData({ ...formData, profilePic: e.target.files[0] });
+    } else if (e.target.name === "resume") {
+      setFormData({ ...formData, resume: e.target.files[0] });
     } else {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     }
@@ -62,7 +66,8 @@ const FreelancerSignUp = () => {
     data.append("password", password);
     data.append("profession", profession);
     data.append("bio", bio);
-    data.append("profile-pic", profilePic);
+    data.append("files", profilePic);
+    data.append("files", resume);
     // api/auth/freelancer-register
     axios
       .post("http://localhost:8800/api/auth/freelancer-register", data)
@@ -186,15 +191,27 @@ const FreelancerSignUp = () => {
                   id="bio"
                 />
               </div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="picture">Picture</Label>
-                <Input
-                  name="profilePic"
-                  id="picture"
-                  onChange={onChange}
-                  type="file"
-                />
+              <div className="flex gap-x-8 items-center">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="picture">Picture</Label>
+                  <Input
+                    name="profilePic"
+                    id="picture"
+                    onChange={onChange}
+                    type="file"
+                  />
+                </div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="cv">Upload Resume or CV</Label>
+                  <Input
+                    name="resume"
+                    id="cv"
+                    onChange={onChange}
+                    type="file"
+                  />
+                </div>
               </div>
+
               <Button type="submit" className="w-full bg-[#396ca0] rounded-3xl">
                 Create an account
               </Button>

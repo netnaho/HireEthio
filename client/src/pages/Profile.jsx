@@ -1,9 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import ProfImg from "@/assets/Nahom.jpg";
+import { FileDown } from "lucide-react";
+
 const Profile = () => {
   const [userInfo, setUserInfo] = useState(null);
+  const [hires, setHires] = useState([]);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const userData = {
     firstName: userInfo
@@ -24,7 +28,20 @@ const Profile = () => {
     email: userInfo
       ? userInfo.isLoggedIn && userInfo.userInfo.userData.Email
       : null,
+    isClient: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.isClient
+      : null,
+    freelancerId: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Freelacner_ID
+      : null,
+    resume: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Resume
+      : null,
+    clientType: userInfo
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Client_Type
+      : null,
   };
+
   axios.defaults.withCredentials = true;
   useEffect(() => {
     axios
@@ -35,8 +52,30 @@ const Profile = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
+  useEffect(() => {
+    console.log("nahmm", userData.freelancerId);
+    const fetchJobs = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8800/api/hire/view-contracts/${userData.freelancerId}`
+        );
+        setHires(response.data);
+        console.log("nahom");
+        console.log(response.data);
+        setLoading(false);
+      } catch (e) {
+        console.log(e);
+        setError(e);
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [userData.freelancerId]);
+
   return (
-    <div className="flex flex-col gap-y-7 mx-auto w-[80%] mb-10">
+    <div className="flex flex-col gap-y-7 mx-auto w-[80%] mb-10 min-h-[65vh]">
       <div className="flex gap-x-5 mx-auto w-full">
         <div className="flex flex-col w-[70%] rounded-md overflow-hidden shadow-lg shadow-slate-400">
           <div className="bg-[#57CC99] h-[200px]"></div>
@@ -57,30 +96,52 @@ const Profile = () => {
                 {userData.firstName} {userData.lastName}
               </h1>
               <p>{userData.profession}</p>
-              <div>Rating 5.0</div>
+              <div>{!userData.isClient && `Rating 5.0`}</div>
               <div className=" mt-4">
                 <h3 className="font-semibold text-lg">About</h3>
-                <p>{userData.bio}</p>
+                <p>
+                  {userData.isClient
+                    ? userData.clientType === "Private"
+                      ? "I am a private client"
+                      : "We're a business organization"
+                    : `${userData.bio}`}
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="w-[30%] h-fit rounded-md shadow-lg p-4 shadow-slate-400">
+        <div className="w-[30%] h-[400px] rounded-md shadow-lg p-4 shadow-slate-400">
           <div>
-            <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">
+            <div className="flex justify-between border-b-[1px] border-slate-200">
               <h3 className="font-semibold text-lg">Contact Info</h3>
               <span>Add</span>
             </div>
+            <div className="h-[150px] mt-4">
+              {" "}
+              <span className="font-semibold">Email:</span> {userData.email}
+            </div>
           </div>
-
-          <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">
-            <h3 className="font-semibold text-lg">Portfolio and Resume</h3>
-            <span>Add</span>
-          </div>
+          {!userData.isClient && (
+            <>
+              <div className="flex justify-between border-b-[1px] border-slate-200">
+                <h3 className="font-semibold text-lg">Portfolio and Resume</h3>
+                <span>Add</span>
+              </div>
+              <div className="flex items-center gap-x-4 mt-5">
+                <span>Download my Resume:</span>
+                <a
+                  href={`http://localhost:8800/images/${userData.resume}`}
+                  download="myfile.pdf"
+                >
+                  <FileDown />
+                </a>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      <div className="w-[70%] rounded-md px-6 py-5 overflow-hidden shadow-lg shadow-slate-400">
+      {/* <div className="w-[70%] rounded-md px-6 py-5 overflow-hidden shadow-lg shadow-slate-400">
         <div className="flex justify-between h-[150px] border-b-[1px] border-slate-200">
           <h3 className="font-semibold text-lg">Skills</h3>
           <span>Add</span>
@@ -103,7 +164,7 @@ const Profile = () => {
           </h3>
           <span>Add</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

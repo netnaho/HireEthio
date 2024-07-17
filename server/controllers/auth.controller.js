@@ -4,7 +4,8 @@ import bcrypt from "bcrypt";
 export const handleFreelancerRegister = async (req, res) => {
   const { firstname, lastname, username, email, password, profession, bio } =
     req.body;
-  const image = req.file.filename;
+  const image = req.files[0].filename;
+  const resume = req.files[1].filename;
   try {
     const [rows] = await pool.query(
       "SELECT * FROM freelancer WHERE Email = ?",
@@ -15,8 +16,8 @@ export const handleFreelancerRegister = async (req, res) => {
     }
     const hassedPassword = await bcrypt.hash(password, 10);
     const [result] = await pool.query(
-      `INSERT INTO freelancer (FirstName, LastName, Username, Email, Password, Proffession, Bio, Profile_Picture)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO freelancer (FirstName, LastName, Username, Email, Password, Proffession, Bio, Profile_Picture, Resume)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         firstname,
         lastname,
@@ -26,6 +27,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
         profession,
         bio,
         image,
+        resume,
       ]
     );
     console.log(result);
