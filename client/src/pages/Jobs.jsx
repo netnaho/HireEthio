@@ -1,10 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Job from "../components/Job";
 
 const Jobs = () => {
+  const [allJobs, setAllJobs] = useState(null);
+  const [searchedJob, setSearchedJob] = useState("");
+  const [userData, setUserData] = useState(null);
+
+  const freelancerId = userData
+    ? userData.isLoggedIn && userData.userInfo.userData.Freelancer_ID
+    : null;
+  const isLoggedIn = userData ? (userData.isLoggedIn ? true : false) : false;
+  console.log(freelancerId);
+
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        console.log(res.data);
+        setUserData(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/api/job/all-jobs")
+      .then((res) => {
+        console.log(res.data);
+        setAllJobs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const clickHandler = () => {
+    const searchedJobs = allJobs.filter((job) => {
+      return job.Job_Category == searchedJob;
+    });
+    setAllJobs(searchedJobs);
+  };
+
+  const handleChange = (e) => {
+    setSearchedJob(e.target.value);
+    axios
+      .get("http://localhost:8800/api/job/all-jobs")
+      .then((res) => {
+        console.log(res.data);
+        console.log("nahom");
+        setAllJobs(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleFilter = () => {
+    const filteredJobs = allJobs;
+  };
   return (
     <div className="py-5">
       <div className="flex gap-x-14 px-10 justify-center">
@@ -15,7 +71,9 @@ const Jobs = () => {
             Filter Jobs
           </div>
           <div className="flex justify-between ">
-            <Button className=" bg-[#38A3A5] rounded-md">Filter</Button>
+            <Button onClick={handleFilter} className=" bg-[#38A3A5] rounded-md">
+              Filter
+            </Button>
             <Button variant="outline">Clear</Button>
           </div>
           <div>
@@ -328,21 +386,45 @@ const Jobs = () => {
         <div className="w-[65%] py-5 shadow-md shadow-slate-500 rounded-lg">
           {/* search input field */}
           <div className="flex w-full px-5 mb-3">
-            <Input className="w-[70%] mr-3" type="email" placeholder="Search" />
-            <Button className=" bg-[#38A3A5]" type="submit">
+            <Input
+              onChange={handleChange}
+              className="w-[70%] mr-3"
+              type="email"
+              placeholder="Search"
+            />
+            <Button
+              onClick={clickHandler}
+              className=" bg-[#38A3A5]"
+              type="submit"
+            >
               Search
             </Button>
           </div>
           {/* job card Lists */}
           <div>
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
-            <Job />
+            {allJobs &&
+              allJobs.map((job, index) => {
+                return (
+                  <div key={index}>
+                    <Job
+                      jobTitle={job.Job_Title}
+                      clientName={job.Username}
+                      postedAt={job.Created_at}
+                      locatedAt={job.Location}
+                      jobDescription={job.Job_Description}
+                      jobCategory={job.Job_Category}
+                      jobSite={job.Job_Site}
+                      jobType={job.Job_Type}
+                      salary={job.Salary}
+                      experience={job.Experience_Level}
+                      deadline={job.Application_Deadline}
+                      jobId={job.Job_ID}
+                      freelancerId={freelancerId}
+                      isLoggedIn={isLoggedIn}
+                    />
+                  </div>
+                );
+              })}
           </div>
         </div>
       </div>
