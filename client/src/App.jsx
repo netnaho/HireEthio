@@ -1,5 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import axios from "axios";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -8,9 +9,9 @@ import Login from "./pages/Login";
 import Jobs from "./pages/Jobs";
 import Posts from "./pages/Posts";
 import Messages from "./pages/Messages";
-import Message from "./pages/Message";
+import Message from "./components/Message";
 import Applicants from "./pages/Applicants";
-import Hires from "./pages/Hires";
+import Hires from "./components/Hire";
 import JobHires from "./pages/JobHires";
 import JobsApplied from "./pages/JobsApplied";
 import Application from "./pages/Application";
@@ -18,12 +19,26 @@ import Profile from "./pages/Profile";
 import ClientSignup from "./pages/ClientSignUp";
 import FreelancerSignUp from "./pages/FreelancerSignUp";
 import PostJob from "./pages/PostJob";
+import { useEffect, useState } from "react";
+import ActiveJobs from "./pages/ActiveJobs";
+import Contracts from "./pages/Contracts";
 
 function App() {
+  const [userInfo, setUserInfo] = useState(null);
+  console.log("nahom7878hkkh");
+  axios.defaults.withCredentials = true;
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        setUserInfo(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const Layout = () => {
     return (
       <>
-        <NavBar />
+        <NavBar userData={userInfo} />
         <Outlet />
         <Footer />
       </>
@@ -36,7 +51,7 @@ function App() {
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Home userData={userInfo} />,
         },
         {
           path: "/login",
@@ -79,7 +94,7 @@ function App() {
           element: <Message />,
         },
         {
-          path: "/applicants",
+          path: "/applicants/:id",
           element: <Applicants />,
         },
         {
@@ -88,15 +103,19 @@ function App() {
         },
         {
           path: "/hires",
-          element: <Hires />,
+          element: <JobHires />,
         },
         {
           path: "/contracts",
-          element: <JobHires />,
+          element: <Contracts />,
         },
         {
           path: "/application",
           element: <Application />,
+        },
+        {
+          path: "/active-jobs",
+          element: <ActiveJobs />,
         },
       ],
     },
