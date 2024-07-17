@@ -421,6 +421,7 @@ const Jobs = () => {
                       jobId={job.Job_ID}
                       freelancerId={freelancerId}
                       isLoggedIn={isLoggedIn}
+                      gender={job.Applicants_Needed}
                     />
                   </div>
                 );

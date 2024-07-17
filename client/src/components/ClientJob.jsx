@@ -17,6 +17,7 @@ const ClientJob = ({
   experience,
   deadline,
   jobId,
+  gender,
 }) => {
   const navigate = useNavigate();
   const job = {
@@ -74,6 +75,9 @@ const ClientJob = ({
         {/* Job type and Job site */}
         <div className=" bg-slate-200 px-2 py-1 rounded-full">
           {jobSite} - {jobType}
+        </div>
+        <div className=" bg-slate-200 px-2 py-1 rounded-full">
+          Gender - {gender === "" ? "both" : gender}
         </div>
       </div>
       {/* Job related Info-3 */}

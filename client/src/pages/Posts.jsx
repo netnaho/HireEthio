@@ -61,6 +61,7 @@ const Posts = () => {
                     experience={job.Experience_Level}
                     deadline={job.Application_Deadline}
                     jobId={job.Job_ID}
+                    gender={job.Applicants_Needed}
                   />
                 </div>
               );

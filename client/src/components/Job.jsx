@@ -17,6 +17,7 @@ const Job = ({
   experience,
   deadline,
   jobId,
+  gender,
   freelancerId,
   isLoggedIn,
 }) => {
@@ -34,6 +35,7 @@ const Job = ({
     salary: salary,
     experience: experience,
     deadline: deadline,
+    gender: gender,
   };
 
   const applicationDatePassed = () => {
@@ -108,6 +110,9 @@ const Job = ({
         {/* Job type and Job site */}
         <div className=" bg-slate-200 px-2 py-1 rounded-full">
           {`${jobSite} - ${jobType}`}
+        </div>
+        <div className=" bg-slate-200 px-2 py-1 rounded-full">
+          Gender - {gender === "" ? "both" : gender}
         </div>
       </div>
       {/* Job related Info-3 */}
