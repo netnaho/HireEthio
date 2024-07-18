@@ -26,6 +26,7 @@ import { Label } from "@/components/ui/label";
 
 const PostJob = () => {
   const navigate = useNavigate();
+  const [gender, setGender] = useState(["male"]);
   const [userData, setUserData] = useState(null);
   const [jobData, setJobData] = useState({
     job_title: "",
@@ -62,6 +63,8 @@ const PostJob = () => {
   };
 
   const handleCheckboxChange = (e) => {
+    console.log(e);
+    console.log("dlkdlkddk");
     const maleChecked = document.getElementById("male").checked;
     const femaleChecked = document.getElementById("female").checked;
 
@@ -178,8 +181,32 @@ const PostJob = () => {
                     <div className="flex gap-x-2 items-center">
                       <Checkbox
                         id="male"
-                        onChange={(e) => {
-                          handleCheckboxChange;
+                        onCheckedChange={(e) => {
+                          console.log(e);
+                          // if (e) {
+                          //   if (gender.includes('male'))
+                          // }
+                          console.log(gender);
+                          const maleChecked = gender.includes("male");
+                          console.log(maleChecked);
+                          // if (e) {
+                          //   console.log(maleChecked);
+                          //   if (maleChecked) {
+                          //     console.log(gender);
+                          //   } else {
+                          //     setGender(gender.push("male"));
+                          //     console.log(gender);
+                          //   }
+                          // } else {
+                          //   if (maleChecked) {
+                          //     setGender(
+                          //       gender.filter((item) => item !== "male")
+                          //     );
+                          //     console.log(gender);
+                          //   } else {
+                          //     console.log(gender);
+                          //   }
+                          // }
                         }}
                       />
                       <Label htmlFor="male">Male</Label>
