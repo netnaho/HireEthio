@@ -95,8 +95,7 @@ const Hire = ({
               Started {formatDate(hireDate)}
             </div>
             <div className="font-bold text-sm text-slate-400">
-              Completed:{" "}
-              {completedDate && `Completed ${formatDate(completedDate)}`}
+              Completed: {completedDate && `${formatDate(completedDate)}`}
             </div>
           </div>
           {/* other */}

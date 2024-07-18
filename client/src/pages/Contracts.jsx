@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Contract from "@/components/Contract";
+import { useNavigate } from "react-router-dom";
 
 const Contracts = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [hires, setHires] = useState([]);
   const [error, setError] = useState(null);
@@ -19,6 +21,9 @@ const Contracts = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);

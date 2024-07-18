@@ -62,7 +62,10 @@ const ClientSignup = () => {
         console.log(res.data);
         navigate("/login");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data.msg);
+      });
     console.log(data);
   };
   return (

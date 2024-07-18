@@ -4,11 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Job from "../components/Job";
+import { useNavigate } from "react-router-dom";
 
 const Jobs = () => {
-  const [allJobs, setAllJobs] = useState(null);
+  const navigate = useNavigate();
+  const [allJobs, setAllJobs] = useState([]);
   const [searchedJob, setSearchedJob] = useState("");
   const [userData, setUserData] = useState(null);
+  const [displayedJobs, setDisplayedJobs] = useState([]);
+  const [displayLimit, setDisplayLimit] = useState(5);
+  const [displayBtn, setDisplayBtn] = useState(false);
+  const [isChecked, setIsChecked] = useState(false);
 
   const freelancerId = userData
     ? userData.isLoggedIn && userData.userInfo.userData.Freelancer_ID
@@ -32,17 +38,25 @@ const Jobs = () => {
       .then((res) => {
         console.log(res.data);
         setAllJobs(res.data);
+        setDisplayedJobs(res.data.slice(0, displayLimit));
+        setDisplayBtn(true);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+  const LoadMoreJobs = () => {
+    setDisplayLimit(allJobs.length); // Set the display limit to the length of the jobs array
+    setDisplayedJobs(allJobs);
+    setDisplayBtn(false);
+  };
+
   const clickHandler = () => {
     const searchedJobs = allJobs.filter((job) => {
       return job.Job_Category == searchedJob;
     });
-    setAllJobs(searchedJobs);
+    setDisplayedJobs(searchedJobs);
   };
 
   const handleChange = (e) => {
@@ -52,7 +66,7 @@ const Jobs = () => {
       .then((res) => {
         console.log(res.data);
         console.log("nahom");
-        setAllJobs(res.data);
+        setDisplayedJobs(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -80,7 +94,15 @@ const Jobs = () => {
             <h2 className=" my-4 font-semibold text-lg">Job Category</h2>
             <div className="flex flex-col gap-y-3">
               <div className="flex items-center space-x-2">
-                <Checkbox id="software" />
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={(e) => {
+                    setIsChecked(e.target.checked);
+                    console.log(isChecked);
+                  }}
+                  id="software"
+                />
                 <label
                   htmlFor="software"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -214,124 +236,6 @@ const Jobs = () => {
             </div>
           </div>
           <div>
-            <h2 className=" my-4 font-semibold text-lg">Job Category</h2>
-            <div className="flex flex-col gap-y-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="software" />
-                <label
-                  htmlFor="software"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Software development
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="accounting" />
-                <label
-                  htmlFor="accounting"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Accounting and finance
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="media" />
-                <label
-                  htmlFor="media"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Media and communication
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="video" />
-                <label
-                  htmlFor="video"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Video Editing
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="script" />
-                <label
-                  htmlFor="script"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Script writing
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="art" />
-                <label
-                  htmlFor="art"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Creative art and design
-                </label>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h2 className=" my-4 font-semibold text-lg">Job Category</h2>
-            <div className="flex flex-col gap-y-3">
-              <div className="flex items-center space-x-2">
-                <Checkbox id="software" />
-                <label
-                  htmlFor="software"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Software development
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="accounting" />
-                <label
-                  htmlFor="accounting"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Accounting and finance
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="media" />
-                <label
-                  htmlFor="media"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Media and communication
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="video" />
-                <label
-                  htmlFor="video"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Video Editing
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="script" />
-                <label
-                  htmlFor="script"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Script writing
-                </label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Checkbox id="art" />
-                <label
-                  htmlFor="art"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Creative art and design
-                </label>
-              </div>
-            </div>
-          </div>
-          <div>
             <h2 className=" my-4 font-semibold text-lg">Experience level</h2>
             <div className="flex flex-col gap-y-3">
               <div className="flex items-center space-x-2">
@@ -402,8 +306,8 @@ const Jobs = () => {
           </div>
           {/* job card Lists */}
           <div>
-            {allJobs &&
-              allJobs.map((job, index) => {
+            {displayedJobs &&
+              displayedJobs.map((job, index) => {
                 return (
                   <div key={index}>
                     <Job
@@ -426,6 +330,13 @@ const Jobs = () => {
                   </div>
                 );
               })}
+          </div>
+          <div className="flex justify-center items-end">
+            {displayBtn && (
+              <Button onClick={LoadMoreJobs} className="bg-green-500 mx-auto">
+                Load More Jobs
+              </Button>
+            )}
           </div>
         </div>
       </div>

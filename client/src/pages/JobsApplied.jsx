@@ -1,8 +1,10 @@
 import SingleApplied from "@/components/SingleApplied";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const JobsApplied = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [jobsApplied, setJobsApplied] = useState([]);
   const freelancerId = userInfo
@@ -14,6 +16,9 @@ const JobsApplied = () => {
       .get("http://localhost:8800/check")
       .then((res) => {
         setUserInfo(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);

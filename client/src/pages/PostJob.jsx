@@ -87,6 +87,9 @@ const PostJob = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -213,8 +216,10 @@ const PostJob = () => {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Categories</SelectLabel>
-                      <SelectItem value="Software-dev">Apple</SelectItem>
-                      <SelectItem value="finance">
+                      <SelectItem value="Software Development">
+                        Software Development
+                      </SelectItem>
+                      <SelectItem value="Finance">
                         Accounting and Finance
                       </SelectItem>
                       <SelectItem value="Media">
@@ -224,6 +229,9 @@ const PostJob = () => {
                       <SelectItem value="Design">
                         Creative art and design
                       </SelectItem>
+                      <SelectItem value="Music">Music and Audio</SelectItem>
+                      <SelectItem value="Service">Customer Service</SelectItem>
+                      <SelectItem value="Consulting">Consulting</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectGroup>
                   </SelectContent>

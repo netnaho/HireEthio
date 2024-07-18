@@ -49,6 +49,10 @@ const Job = ({
   };
 
   const goToApplication = (job) => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
     const data = {
       jobId: jobId,
       freelancerId: freelancerId,

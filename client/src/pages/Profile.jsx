@@ -2,8 +2,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FileDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
   const [hires, setHires] = useState([]);
   const [error, setError] = useState(null);
@@ -49,6 +51,9 @@ const Profile = () => {
       .then((res) => {
         console.log(res.data);
         setUserInfo(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);

@@ -75,7 +75,10 @@ const FreelancerSignUp = () => {
         console.log(res.data);
         navigate("/login");
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+        alert(error.response.data.msg);
+      });
   };
   return (
     <div className="flex justify-center items-center h-fit py-5">
