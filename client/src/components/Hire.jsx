@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
+import { set } from "date-fns";
 
 const Hire = ({
   applicationId,
@@ -32,9 +33,22 @@ const Hire = ({
   jobTitle,
   jobDesc,
   profilePic,
+  hireId,
+  paymentPaid,
 }) => {
   const navigate = useNavigate();
   const [rate, setRate] = useState(null);
+  const [payBtnVisble, setPayBtnVisble] = useState(true);
+  const [form, setForm] = useState({
+    amount: "",
+    currency: "ETB",
+    email: "",
+    first_name: firstName,
+    last_name: lastName,
+    phone_number: "",
+  });
+
+  const tx_ref = `${form.first_name}-${Date.now()}`;
   const formatDate = (datetimeString) => {
     const date = new Date(datetimeString);
     return date.toLocaleDateString(); // Adjust options as needed
@@ -55,6 +69,52 @@ const Hire = ({
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handlePayment = async () => {
+    const paymentData = {
+      hireId: hireId,
+      isCompleted: true,
+    };
+    try {
+      const res = await axios.post(
+        "http://localhost:8800/accept-payment",
+        {
+          ...form,
+          tx_ref,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+
+      window.location.href = res.data.data.checkout_url;
+      console.log(res);
+      console.log("nahomm");
+      setForm({
+        amount: "",
+        currency: "Birr",
+        email: "",
+        first_name: firstName,
+        last_name: lastName,
+        phone_number: "",
+        tx_ref,
+      });
+      setPayBtnVisble(false);
+
+      // payment handler
+
+      axios
+        .post("http://localhost:8800/api/hire/payment-complete", paymentData)
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } catch (error) {
+      console.log("Error", error);
+    }
   };
   return (
     <div>
@@ -100,9 +160,87 @@ const Hire = ({
           </div>
           {/* other */}
           <div className="flex gap-x-4">
-            <button className=" bg-green-500 px-5 py-2 rounded-xl text-white font-mono font-semibold">
-              Pay
-            </button>
+            {!paymentPaid ? (
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className=" bg-green-500 px-5 py-2 rounded-xl text-white font-mono font-semibold">
+                    Pay with Chapa
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Pay Freelancer</DialogTitle>
+                    <DialogDescription>
+                      Enter payment information.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="amount" className="text-right">
+                        Amount:
+                      </Label>
+                      <Input
+                        id="amount"
+                        name="amount"
+                        type="number"
+                        onChange={(e) => {
+                          setForm({ ...form, amount: e.target.value });
+                        }}
+                        placeholder="Enter amount"
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="phone" className="text-right">
+                        Phone:
+                      </Label>
+                      <Input
+                        id="phone"
+                        type="number"
+                        name="phone_number"
+                        onChange={(e) => {
+                          setForm({ ...form, phone_number: e.target.value });
+                        }}
+                        placeholder="Enter phone number"
+                        className="col-span-3"
+                      />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Email:
+                      </Label>
+                      <Input
+                        id="name"
+                        type="email"
+                        name="email"
+                        onChange={(e) => {
+                          setForm({ ...form, email: e.target.value });
+                        }}
+                        placeholder="Enter email address"
+                        className="col-span-3"
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={handlePayment} type="submit">
+                      Pay
+                    </Button>
+                    <DialogClose asChild>
+                      <Button type="button" variant="secondary">
+                        Close
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <>
+                <span className="text-green-500 font-mono font-semibold text-xl">
+                  payment successful
+                </span>
+              </>
+            )}
+
             {!rating && (
               <Dialog>
                 <DialogTrigger asChild>

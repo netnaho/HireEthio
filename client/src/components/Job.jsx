@@ -129,7 +129,7 @@ const Job = ({
         {/* Experience level */}
         <div className="flex flex-col">
           <span className=" text-slate-500">Expenrence level</span>
-          <span>{experience}</span>
+          <span>{experience ? experience : "intermidiate"}</span>
         </div>
         {/* Application Deadline */}
         <div className="flex flex-col">

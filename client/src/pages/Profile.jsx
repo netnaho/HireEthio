@@ -10,6 +10,7 @@ const Profile = () => {
   const [hires, setHires] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [rating, setRating] = useState([]);
 
   const userData = {
     firstName: userInfo
@@ -34,7 +35,7 @@ const Profile = () => {
       ? userInfo.isLoggedIn && userInfo.userInfo.isClient
       : null,
     freelancerId: userInfo
-      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Freelacner_ID
+      ? userInfo.isLoggedIn && userInfo.userInfo.userData.Freelancer_ID
       : null,
     resume: userInfo
       ? userInfo.isLoggedIn && userInfo.userInfo.userData.Resume
@@ -59,7 +60,28 @@ const Profile = () => {
   }, []);
 
   useEffect(() => {
-    console.log("nahmm", userData.freelancerId);
+    console.log(userData.freelancerId, "akdjf;lakeoieakdj");
+    axios
+      .get(`http://localhost:8800/api/hire/see-rating/${userData.freelancerId}`)
+      .then((res) => {
+        console.log(res.data);
+        setRating(
+          res.data.map((rate) => {
+            if (rate.Rating === null) {
+              return 0;
+            } else {
+              return parseInt(rate.Rating);
+            }
+          })
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log("nahmm");
     const fetchJobs = async () => {
       try {
         const response = await axios.get(
@@ -101,7 +123,15 @@ const Profile = () => {
                 {userData.firstName} {userData.lastName}
               </h1>
               <p>{userData.profession}</p>
-              <div>{!userData.isClient && `Rating 5.0`}</div>
+              <div>
+                {!userData.isClient && rating.length === 0
+                  ? `Rating: 0`
+                  : `Rating: ${(
+                      rating.reduce((acc, rate) => {
+                        return (acc += rate);
+                      }) / rating.length
+                    ).toFixed(2)}`}
+              </div>
               <div className=" mt-4">
                 <h3 className="font-semibold text-lg">About</h3>
                 <p>

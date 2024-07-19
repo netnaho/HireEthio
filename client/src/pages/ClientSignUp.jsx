@@ -47,6 +47,10 @@ const ClientSignup = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long");
+      return;
+    }
     const data = new FormData();
     data.append("firstname", firstname);
     data.append("lastname", lastname);

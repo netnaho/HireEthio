@@ -138,7 +138,7 @@ const Applicant = ({
                 <Button variant="link">@{username}</Button>
               </HoverCardTrigger>
               <HoverCardContent className="w-80">
-                <div className="flex justify-between space-x-6">
+                <div className="flex space-x-6">
                   <Avatar>
                     <AvatarImage
                       src={`http://localhost:8800/images/${profilePic}`}
