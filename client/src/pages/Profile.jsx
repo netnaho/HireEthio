@@ -124,13 +124,15 @@ const Profile = () => {
               </h1>
               <p>{userData.profession}</p>
               <div>
-                {!userData.isClient && rating.length === 0
-                  ? `Rating: 0`
-                  : `Rating: ${(
-                      rating.reduce((acc, rate) => {
-                        return (acc += rate);
-                      }) / rating.length
-                    ).toFixed(2)}`}
+                {!userData.isClient
+                  ? rating.length === 0
+                    ? `Rating: 0`
+                    : `Rating: ${(
+                        rating.reduce((acc, rate) => {
+                          return (acc += rate);
+                        }, 0) / rating.length
+                      ).toFixed(2)}`
+                  : ""}
               </div>
               <div className=" mt-4">
                 <h3 className="font-semibold text-lg">About</h3>
@@ -166,6 +168,7 @@ const Profile = () => {
                 <span>Download my Resume:</span>
                 <a
                   href={`http://localhost:8800/images/${userData.resume}`}
+                  target="_blank"
                   download="myfile.pdf"
                 >
                   <FileDown />

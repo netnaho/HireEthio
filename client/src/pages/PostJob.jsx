@@ -26,7 +26,6 @@ import { Label } from "@/components/ui/label";
 
 const PostJob = () => {
   const navigate = useNavigate();
-  const [gender, setGender] = useState(["male"]);
   const [userData, setUserData] = useState(null);
   const [jobData, setJobData] = useState({
     job_title: "",
@@ -62,12 +61,11 @@ const PostJob = () => {
     setJobData({ ...jobData, job_site: e.target.value });
   };
 
-  const handleCheckboxChange = (e) => {
-    console.log(e);
+  const handleCheckboxChange = () => {
     console.log("dlkdlkddk");
     const maleChecked = document.getElementById("male").checked;
     const femaleChecked = document.getElementById("female").checked;
-
+    console.log(maleChecked, femaleChecked);
     let gender = "";
     if (maleChecked && femaleChecked) {
       gender = "both";
@@ -76,7 +74,7 @@ const PostJob = () => {
     } else if (femaleChecked) {
       gender = "female";
     }
-    console.log(gender);
+    console.log("riva", gender);
 
     setJobData((prevFormData) => ({
       ...prevFormData,
@@ -179,40 +177,25 @@ const PostJob = () => {
                   </Label>
                   <div className="flex gap-x-4 pl-4">
                     <div className="flex gap-x-2 items-center">
-                      <Checkbox
+                      <input
+                        type="checkbox"
+                        name=""
                         id="male"
-                        onCheckedChange={(e) => {
-                          console.log(e);
-                          // if (e) {
-                          //   if (gender.includes('male'))
-                          // }
-                          console.log(gender);
-                          const maleChecked = gender.includes("male");
-                          console.log(maleChecked);
-                          // if (e) {
-                          //   console.log(maleChecked);
-                          //   if (maleChecked) {
-                          //     console.log(gender);
-                          //   } else {
-                          //     setGender(gender.push("male"));
-                          //     console.log(gender);
-                          //   }
-                          // } else {
-                          //   if (maleChecked) {
-                          //     setGender(
-                          //       gender.filter((item) => item !== "male")
-                          //     );
-                          //     console.log(gender);
-                          //   } else {
-                          //     console.log(gender);
-                          //   }
-                          // }
-                        }}
+                        onClick={handleCheckboxChange}
+                        className="w-[15px] h-[15px]"
                       />
+                      {/* <Checkbox id="male" /> */}
                       <Label htmlFor="male">Male</Label>
                     </div>
                     <div className="flex gap-x-2 items-center">
-                      <Checkbox id="female" onChange={handleCheckboxChange} />
+                      <input
+                        type="checkbox"
+                        name=""
+                        id="female"
+                        onClick={handleCheckboxChange}
+                        className="w-[15px] h-[15px]"
+                      />
+                      {/* <Checkbox id="female" /> */}
                       <Label htmlFor="female">Female</Label>
                     </div>
                   </div>
@@ -339,7 +322,7 @@ const PostJob = () => {
                   </Label>
                   <Input
                     className="w-[300px]"
-                    type="text"
+                    type="number"
                     name="salary"
                     onChange={handleChange}
                     placeholder="Salary"

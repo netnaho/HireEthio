@@ -69,6 +69,7 @@ const Contracts = () => {
                   jobTitle={hire.Job_Title}
                   jobDesc={hire.Job_Description}
                   profilePic={hire.Profile_Picture}
+                  isPaid={hire.isCompleted}
                 />
               </div>
             );

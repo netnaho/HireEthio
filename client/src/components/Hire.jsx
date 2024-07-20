@@ -235,7 +235,7 @@ const Hire = ({
               </Dialog>
             ) : (
               <>
-                <span className="text-green-500 font-mono font-semibold text-xl">
+                <span className="text-green-500 font-mono font-semibold">
                   payment successful
                 </span>
               </>

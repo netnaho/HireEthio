@@ -60,6 +60,7 @@ export const handleViewContracts = async (req, res) => {
             h.Hire_Date,
             h.Completed_Date,
             h.Rating,
+            h.isCompleted,
             c.FirstName,
             c.LastName,
             c.Profile_Picture,

@@ -59,7 +59,7 @@ const ClientJob = ({
       .delete(`http://localhost:8800/api/job/delete-job/${jobId}`)
       .then((res) => {
         console.log(res);
-        navigate(0);
+        //navigate(0);
       })
       .catch((err) => {
         console.log(err);
