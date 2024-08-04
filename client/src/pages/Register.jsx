@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
+import FreelancerImg from "../assets/user.png";
+import ClientImg from "../assets/businessman.png";
 
 const Register = () => {
   const [userType, setUserType] = useState(null);
@@ -23,14 +25,21 @@ const Register = () => {
             className={`${
               userType === "freelancer" &&
               "duration-300 shadow-lg shadow-green-800 border-green-500"
-            } flex shadow-md shadow-slate-600 border-[1px] border-slate-300 p-4 w-[160px] h-[160px] rounded-lg gap-x-6 space-x-2`}
+            } flex flex-col shadow-md shadow-slate-600 border-[1px] border-slate-300 p-6 w-[190px] h-[190px] rounded-lg space-x-2`}
           >
-            <RadioGroupItem
-              checked={userType === "freelancer" && true}
-              value="default"
-              id="r1"
+            <div className="flex gap-x-5">
+              <RadioGroupItem
+                checked={userType === "freelancer" && true}
+                value="default"
+                id="r1"
+              />
+              <Label htmlFor="r1">Freelancer</Label>
+            </div>
+            <img
+              className="object-cover w-[90%] mt-3"
+              src={FreelancerImg}
+              alt=""
             />
-            <Label htmlFor="r1">Freelancer</Label>
           </div>
           <div
             onClick={() => {
@@ -39,14 +48,17 @@ const Register = () => {
             className={`${
               userType === "client" &&
               "shadow-lg shadow-green-800 border-green-500 duration-300"
-            } flex shadow-md shadow-slate-600 border-[1px] border-slate-300 p-4 w-[160px] h-[160px] rounded-lg gap-x-6 space-x-2`}
+            } flex flex-col shadow-md shadow-slate-600 border-[1px] border-slate-300 p-6 w-[190px] h-[190px] rounded-lg space-x-2`}
           >
-            <RadioGroupItem
-              checked={userType === "client" && true}
-              value="comfortable"
-              id="r2"
-            />
-            <Label htmlFor="r2">Client</Label>
+            <div className="flex gap-x-5">
+              <RadioGroupItem
+                checked={userType === "client" && true}
+                value="comfortable"
+                id="r2"
+              />
+              <Label htmlFor="r2">Client</Label>
+            </div>
+            <img className="object-cover w-[90%] mt-3" src={ClientImg} alt="" />
           </div>
         </RadioGroup>
       </div>

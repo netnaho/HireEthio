@@ -1,22 +1,27 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Applicant from "@/components/Applicant";
 
 const Applicants = () => {
+  const navigate = useNavigate();
   // const [userInfo, setUserInfo] = useState(null);
   const [jobApplicants, setJobApplicants] = useState([]);
+  const [userData, setUserData] = useState(null);
   const { id } = useParams();
   const jobId = id;
   axios.defaults.withCredentials = true;
-  // useEffect(() => {
-  //   axios
-  //     .get("http://localhost:8800/check")
-  //     .then((res) => {
-  //       setUserInfo(res.data);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
+  useEffect(() => {
+    axios
+      .get("http://localhost:8800/check")
+      .then((res) => {
+        setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     axios

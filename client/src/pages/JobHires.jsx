@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Hire from "@/components/Hire";
+import { useNavigate } from "react-router-dom";
 
 const JobHires = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [hires, setHires] = useState([]);
   const [error, setError] = useState(null);
@@ -19,6 +21,9 @@ const JobHires = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -74,6 +79,8 @@ const JobHires = () => {
                   jobTitle={hire.Job_Title}
                   jobDesc={hire.Job_Description}
                   profilePic={hire.Profile_Picture}
+                  hireId={hire.Hire_ID}
+                  paymentPaid={hire.isCompleted}
                 />
               </div>
             );

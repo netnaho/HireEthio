@@ -13,6 +13,8 @@ export const handleViewHired = async (req, res) => {
             h.Hire_Date,
             h.Completed_Date,
             h.Rating,
+            h.Hire_ID,
+            h.isCompleted,
             f.FirstName,
             f.LastName,
             f.Profile_Picture,
@@ -58,6 +60,7 @@ export const handleViewContracts = async (req, res) => {
             h.Hire_Date,
             h.Completed_Date,
             h.Rating,
+            h.isCompleted,
             c.FirstName,
             c.LastName,
             c.Profile_Picture,
@@ -164,5 +167,39 @@ export const rateFreelancer = async (req, res) => {
   } catch (error) {
     console.error("Database query error:", error);
     res.status(500).send("Internal server error");
+  }
+};
+
+export const paymentCompleted = async (req, res) => {
+  const { hireId, isCompleted } = req.body;
+  try {
+    const [result] = await pool.query(
+      `UPDATE hires SET isCompleted = ? WHERE Hire_ID = ?`,
+      [isCompleted, hireId]
+    );
+    if (result.affectedRows > 0) {
+      res.json({ message: "1" });
+      console.log("payment completed");
+    } else {
+      res.json({ message: "2" });
+    }
+  } catch (error) {
+    console.error("Database query error:", error);
+    res.status(500).send("Internal server error");
+  }
+};
+
+export const seeRating = async (req, res) => {
+  const freelancerId = req.params.id;
+  try {
+    const [result] = await pool.query(
+      `SELECT Rating FROM hires WHERE Freelancer_ID = ?`,
+      [freelancerId]
+    );
+    console.log(result);
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
   }
 };

@@ -172,3 +172,21 @@ export const handleJobComplete = async (req, res) => {
     res.status(500).send("Internal server error");
   }
 };
+
+export const updateJobPost = async (req, res) => {
+  const { jobId, jobTitle, jobDesc, salary, location } = req.body;
+  try {
+    const [result] = await pool.query(
+      `UPDATE jobs
+SET Job_Title = ?, Job_Description = ?, Salary = ?, Location = ? WHERE Job_ID = ?`,
+      [jobTitle, jobDesc, salary, location, jobId]
+    );
+    if (result.affectedRows > 0) {
+      res.json({ isUpdated: true });
+      console.log("successfull");
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+};

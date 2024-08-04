@@ -61,10 +61,11 @@ const PostJob = () => {
     setJobData({ ...jobData, job_site: e.target.value });
   };
 
-  const handleCheckboxChange = (e) => {
+  const handleCheckboxChange = () => {
+    console.log("dlkdlkddk");
     const maleChecked = document.getElementById("male").checked;
     const femaleChecked = document.getElementById("female").checked;
-
+    console.log(maleChecked, femaleChecked);
     let gender = "";
     if (maleChecked && femaleChecked) {
       gender = "both";
@@ -73,7 +74,7 @@ const PostJob = () => {
     } else if (femaleChecked) {
       gender = "female";
     }
-    console.log(gender);
+    console.log("riva", gender);
 
     setJobData((prevFormData) => ({
       ...prevFormData,
@@ -87,6 +88,9 @@ const PostJob = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -173,16 +177,25 @@ const PostJob = () => {
                   </Label>
                   <div className="flex gap-x-4 pl-4">
                     <div className="flex gap-x-2 items-center">
-                      <Checkbox
+                      <input
+                        type="checkbox"
+                        name=""
                         id="male"
-                        onChange={(e) => {
-                          handleCheckboxChange;
-                        }}
+                        onClick={handleCheckboxChange}
+                        className="w-[15px] h-[15px]"
                       />
+                      {/* <Checkbox id="male" /> */}
                       <Label htmlFor="male">Male</Label>
                     </div>
                     <div className="flex gap-x-2 items-center">
-                      <Checkbox id="female" onChange={handleCheckboxChange} />
+                      <input
+                        type="checkbox"
+                        name=""
+                        id="female"
+                        onClick={handleCheckboxChange}
+                        className="w-[15px] h-[15px]"
+                      />
+                      {/* <Checkbox id="female" /> */}
                       <Label htmlFor="female">Female</Label>
                     </div>
                   </div>
@@ -213,8 +226,10 @@ const PostJob = () => {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Categories</SelectLabel>
-                      <SelectItem value="Software-dev">Apple</SelectItem>
-                      <SelectItem value="finance">
+                      <SelectItem value="Software Development">
+                        Software Development
+                      </SelectItem>
+                      <SelectItem value="Finance">
                         Accounting and Finance
                       </SelectItem>
                       <SelectItem value="Media">
@@ -224,6 +239,9 @@ const PostJob = () => {
                       <SelectItem value="Design">
                         Creative art and design
                       </SelectItem>
+                      <SelectItem value="Music">Music and Audio</SelectItem>
+                      <SelectItem value="Service">Customer Service</SelectItem>
+                      <SelectItem value="Consulting">Consulting</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectGroup>
                   </SelectContent>
@@ -304,7 +322,7 @@ const PostJob = () => {
                   </Label>
                   <Input
                     className="w-[300px]"
-                    type="text"
+                    type="number"
                     name="salary"
                     onChange={handleChange}
                     placeholder="Salary"

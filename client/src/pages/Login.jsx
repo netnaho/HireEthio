@@ -29,7 +29,10 @@ const Login = () => {
         navigate("/", { state: { userData } });
         window.location.reload();
       })
-      .catch((err) => console.log(err.response));
+      .catch((err) => {
+        console.log(err.response);
+        alert("Login Failed, check your credentials and try again.");
+      });
   };
 
   return (

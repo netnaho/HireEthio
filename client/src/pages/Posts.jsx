@@ -1,10 +1,12 @@
 import Job from "@/components/ClientJob";
 import React, { useState, useEffect } from "react";
-import axios, { all } from "axios";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Posts = () => {
   const [allClientJobs, setAllClientJobs] = useState([]);
   const [userData, setUserData] = useState(null);
+  const navigate = useNavigate();
 
   const clientId = userData
     ? userData.isLoggedIn && userData.userInfo.userData.Client_ID
@@ -22,6 +24,9 @@ const Posts = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);
@@ -61,6 +66,7 @@ const Posts = () => {
                     experience={job.Experience_Level}
                     deadline={job.Application_Deadline}
                     jobId={job.Job_ID}
+                    gender={job.Applicants_Needed}
                   />
                 </div>
               );

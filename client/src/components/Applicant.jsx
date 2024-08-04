@@ -3,6 +3,12 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FileDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { CalendarIcon } from "@radix-ui/react-icons";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import {
   Accordion,
   AccordionContent,
@@ -126,7 +132,29 @@ const Applicant = ({
               {freelancerFirstName} {freelancerLastName}
             </h2>
           </div>
-          <div>Rating 5.0</div>
+          <div>
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Button variant="link">@{username}</Button>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="flex space-x-6">
+                  <Avatar>
+                    <AvatarImage
+                      src={`http://localhost:8800/images/${profilePic}`}
+                    />
+                    <AvatarFallback>VC</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-1">
+                    <h4 className="text-sm font-semibold">@{username}</h4>
+                    <p className="text-sm">
+                      <span className="font-semibold">Bio:</span> {bio}
+                    </p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
         </div>
         <div>
           <p className="font-bold text-xl text-slate-400">{profession}</p>

@@ -5,6 +5,10 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import multer from "multer";
 import path from "path";
+import axios from "axios";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 import authRoute from "./routes/auth.route.js";
 import jobRoute from "./routes/job.route.js";
@@ -78,6 +82,57 @@ app.post("/logout", (req, res) => {
     res.sendStatus(200);
     console.log("good");
   });
+});
+
+const CHAPA_AUTH_KEY = process.env.CHAPA_AUTH_KEY;
+app.post("/accept-payment", async (req, res) => {
+  const {
+    amount,
+    currency,
+    email,
+    first_name,
+    last_name,
+    phone_number,
+    tx_ref,
+  } = req.body;
+  try {
+    const header = {
+      headers: {
+        Authorization: `Bearer ${CHAPA_AUTH_KEY}`,
+        "Content-Type": "application/json",
+      },
+    };
+    const body = {
+      amount: amount,
+      currency: currency,
+      email: email,
+      first_name: first_name,
+      last_name: last_name,
+      phone_number: phone_number,
+      tx_ref: tx_ref,
+      return_url: "http://localhost:5173/hires", // Set your return URL
+    };
+    let resp = "";
+    await axios
+      .post("https://api.chapa.co/v1/transaction/initialize", body, header)
+      .then((response) => {
+        resp = response;
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        res.status(400).json({
+          message: error,
+        });
+      });
+    res.status(200).json(resp.data);
+  } catch (e) {
+    res.status(400).json({
+      error_code: e.code,
+      message: e.message,
+    });
+  }
 });
 
 app.post("/test", upload.single("profile-pic"), (req, res) => {

@@ -22,6 +22,9 @@ const ActiveJobs = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);

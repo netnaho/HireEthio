@@ -19,6 +19,7 @@ const Contract = ({
   jobTitle,
   jobDesc,
   profilePic,
+  isPaid,
 }) => {
   const formatDate = (datetimeString) => {
     const date = new Date(datetimeString);
@@ -73,6 +74,15 @@ const Contract = ({
             </div>
           </div>
           {/* other */}
+          {isPaid ? (
+            <span className="text-green-500 font-mono font-semibold">
+              payment completed
+            </span>
+          ) : (
+            <span className="text-yellow-500 font-mono font-semibold">
+              payment pending...
+            </span>
+          )}
         </div>
       </div>
     </div>

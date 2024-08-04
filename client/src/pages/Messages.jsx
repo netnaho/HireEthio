@@ -10,8 +10,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import SingleMessage from "@/components/SingleMessage";
 import Message from "@/components/Message";
+import { useNavigate } from "react-router-dom";
 
 const Messages = () => {
+  const navigate = useNavigate();
   const [re, setRe] = useState(0);
   const [userData, setUserData] = useState(null);
   const [chatList, setChatList] = useState([]);
@@ -50,6 +52,9 @@ const Messages = () => {
       .then((res) => {
         console.log(res.data);
         setUserData(res.data);
+        if (!res.data.isLoggedIn) {
+          navigate("/login");
+        }
       })
       .catch((err) => console.log(err));
   }, []);
