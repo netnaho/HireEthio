@@ -12,9 +12,9 @@ HireEthio is a job listing platform focused on connecting employers with potenti
 
 ## Technologies Used
 
-- **Frontend**: JavaScript, HTML, CSS
-- **Backend**: [Specify backend technologies if applicable]
-- **Database**: [Specify database technologies if applicable]
+- **Frontend**: JavaScript, HTML, CSS, React.js, TailwindCSS, Shadcn UI
+- **Backend**: Node.js, Express.js, JWT, bcrypt
+- **Database**: MySQL
 
 ## Getting Started
 
